@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { Hero, Stats, AsymmetricAbout, BentoGrid, EditorialList, Testimonial, FullWidthCTA, Footer } from "@/components/Engine";
+import { Hero, Stats, AsymmetricAbout, BentoGrid, EditorialList, Testimonial, FullWidthCTA, Footer } from "../components/Engine";
 
 export default function Home() {
   const [description, setDescription] = useState("");
