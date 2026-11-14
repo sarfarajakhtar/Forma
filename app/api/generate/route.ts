@@ -4,37 +4,47 @@ import Anthropic from "@anthropic-ai/sdk";
 export const maxDuration = 300;
 
 const DESIGN_SYSTEM_PROMPT = `
-You are designing for an elite web design studio. Every rule below is enforced.
+You are an award-winning UI/UX designer at an elite agency. You build cinematic, high-end websites (similar to luxury hotel and premium real estate themes). You NEVER build basic or generic templates.
 
 CRITICAL CODE RULES:
-- Return ONLY raw HTML. NO markdown fences, NO HTML comments (<!-- -->), NO massive SVG blocks.
-- Keep the code highly optimized and short. Use Tailwind utility classes for everything.
+- Return ONLY raw HTML. NO markdown fences.
 - You MUST finish the entire document ending with </html>.
-- Total sections: 3 to 4. (e.g., Nav, Hero, Features, Footer). Do not over-complicate the layout.
+- Use Tailwind CSS for styling. Use inline styles only if absolutely necessary for a background image.
 
-TYPOGRAPHY — choose ONE font pair. Never Inter alone:
-- Fraunces + Inter Tight · Instrument Serif + Inter Tight · Playfair Display + Source Sans 3 · Space Grotesk + Inter Tight · DM Serif Display + DM Sans · Bricolage Grotesque + Inter Tight
+IMAGERY (CINEMATIC & FULL-BLEED):
+- Hero sections MUST be a full-bleed background image with a dark gradient overlay (e.g., bg-black/50) so white text is readable.
+- You MUST use real Unsplash images using this exact format: 
+  https://images.unsplash.com/photo-{ID}?auto=format&fit=crop&w=1920&q=80
+  (Use these relevant IDs: Luxury Hotel/Resort: 1566073771259-6a8506099945. Modern Gym: 1534438327276-14e5300c3a48. Real Estate/Villa: 1600596542815-ffad4c1539a9. Travel/Landscape: 1476514525535-07fb3b4ae5f1. Tech/Corporate: 1497366216548-37526070297c).
 
-SPACING — strict 8pt grid: 0,4,8,12,16,24,32,40,48,64,80,96,128px. Section padding 96px.
+FLOATING OVERLAPS (THE SECRET SAUCE):
+- Instead of basic stacked sections, use overlapping elements. For example, a booking/search widget or a stat block should float over the bottom of the hero image. Use Tailwind classes like: relative, -mt-24, z-10, shadow-2xl.
+- Use 12-column grids (grid-cols-12) for content sections. Mix widths (col-span-4, col-span-8, col-span-6). Do not use 50/50 splits.
 
-COLOR — neutral base + exactly ONE accent: terracotta, forest, navy, plum, ochre, clay, sage, or ink. Never pure #000 or #fff.
+TYPOGRAPHY & LAYOUT (EDITORIAL STYLE):
+- Choose ONE elegant font pair. Use massive sizes for headings (text-5xl md:text-7xl lg:text-8xl) and keep body text clean and readable.
+- Section padding must be generous (py-24 or py-32).
+- Use a sophisticated neutral background (like #f8f6f0 or #1a1a1a) and a rich accent color.
 
-RADII — buttons 8px, cards 12px, media 16px.
+ANIMATIONS & INTERACTIONS:
+- Add smooth hover effects: images should subtly zoom in (hover:scale-105 transition-transform duration-700). Buttons should change background color smoothly.
+- Add scroll-reveal classes if possible.
 
-SECTION ARCHETYPES — pick from these, do not invent layouts:
-Asymmetric split hero (text 55% / visual 45%) · Full-bleed image hero (text bottom-left) · Editorial oversized-type hero · Alternating image/text · Bento grid. Do NOT use three identical icon cards.
+BANNED PATTERNS (AUTO-REJECT):
+- NO rows of three identical feature cards. 
+- NO pure black or pure white backgrounds.
+- NO centered text blocks. Use asymmetric left-aligned layouts.
+- NO "Lorem ipsum", "Acme", or generic placeholder copy.
+- NO complex SVG blocks. Use CSS for visual spacing and layout.
 
-ABSOLUTELY BANNED:
-- Purple/violet gradients · Inter as the only font · Center-aligning everything · Emoji as icons.
-- "Lorem ipsum", "Acme", "Your Company", "Welcome to our website", "Unlock your potential".
-- Invented testimonials, statistics, awards, phone numbers, or addresses.
-- Pure #000 or #fff for text/backgrounds.
+FACTUAL INTEGRITY:
+- Write high-end, evocative copy based on the user's prompt. Treat the text like a luxury brand voice.
 
-FACTUAL INTEGRITY — Use ONLY what the user supplied. If data is missing, omit the section.
+MOBILE:
+- Design mobile-first (390px). Use md: and lg: breakpoints for the complex grids.
 
-MOBILE — design for 390px width first. Use Tailwind md: and lg: breakpoints.
-
-OUTPUT — A complete standalone HTML file using Tailwind CDN <script src="https://cdn.tailwindcss.com"></script> and Google Fonts. Use flat CSS colors and simple geometry. Do NOT use complex SVGs or external images. Return ONLY the HTML.
+OUTPUT:
+- A complete standalone HTML file using Tailwind CDN <script src="https://cdn.tailwindcss.com"></script> and Google Fonts. Return ONLY the HTML.
 `;
 
 export async function POST(req: Request) {
@@ -50,14 +60,14 @@ export async function POST(req: Request) {
     });
 
     const msg = await client.messages.create({
-      model: "claude-sonnet-4-6",
-      temperature: 0.2,
+      model: "claude-sonnet-4-6", 
+      temperature: 0.5, // Higher temp for more creative, award-winning layout choices
       max_tokens: 8192,
       system: DESIGN_SYSTEM_PROMPT,
       messages: [
         { 
           role: "user", 
-          content: `Generate a complete landing page for this business:\n\n${description}\n\nPick the font pair and accent that best fit. Keep the code short and concise.` 
+          content: `Generate a cinematic, elite landing page for this business:\n\n${description}` 
         }
       ]
     });
@@ -67,16 +77,14 @@ export async function POST(req: Request) {
       html = msg.content[0].text;
     }
 
-    // Clean up markdown
     html = html.replace(/^```(?:html)?\s*/i, "").replace(/\s*```\s*$/i, "").trim();
 
-    // Safety check: Ensure it starts with <!DOCTYPE and ends with </html>
     if (!html.startsWith("<!DOCTYPE html>") && !html.startsWith("<html")) {
       return NextResponse.json({ error: "AI returned malformed output. Try again." }, { status: 500 });
     }
     
     if (!html.endsWith("</html>")) {
-      return NextResponse.json({ error: "The AI got cut off. Please try again or make the business description slightly shorter." }, { status: 500 });
+      return NextResponse.json({ error: "The AI got cut off. Please try again." }, { status: 500 });
     }
 
     return NextResponse.json({ html });
