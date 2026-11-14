@@ -16,11 +16,20 @@ export const Hero = ({ data, theme }: any) => {
   const isGym = theme === "gym";
   const isSpa = theme === "spa";
   
+  const fallbackImage = isGym 
+    ? "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=1920&q=80"
+    : "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1920&q=80";
+
   return (
-    <section className={`relative w-full h-screen flex items-center justify-center overflow-hidden ${isGym ? 'bg-[#0a0a0a]' : 'bg-[#1a1a1a]'}`}>
+    <section 
+      className={`relative w-full h-screen flex items-center justify-center overflow-hidden ${isGym ? 'bg-[#0a0a0a]' : 'bg-[#1a1a1a]'}`}
+      style={{ backgroundImage: `url(${fallbackImage})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
+    >
       <video autoPlay loop muted playsInline className="absolute inset-0 w-full h-full object-cover z-0 opacity-40">
         <source src={data.videoUrl || "https://assets.mixkit.co/videos/preview/mixkit-spa-and-wellness-39953-large.mp4"} type="video/mp4" />
       </video>
+      <div className="absolute inset-0 bg-black/40 z-10"></div>
+      
       <motion.div initial="hidden" animate="visible" variants={stagger} className="relative z-20 w-full max-w-[90rem] mx-auto px-6 md:px-12 flex flex-col justify-center h-full pt-20">
         <motion.h1 variants={fadeUp} className={`leading-[1.05] text-white tracking-tight ${isGym ? 'font-gym text-[10vw] uppercase font-bold' : isSpa ? 'font-spa text-[8vw] font-normal' : 'font-sans text-[8vw] font-bold'}`}>
           {data.headline}
