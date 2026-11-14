@@ -30,7 +30,8 @@ export default function Home() {
   }
 
   const renderSection = (section: any, index: number) => {
-    const props = { key: index, data: section.props, theme: blueprint.theme };
+    if (!section || !section.props) return null;
+    const props = { key: index, data: section.props, theme: blueprint?.theme || 'spa' };
     switch (section.type) {
       case "Hero": return <Hero {...props} />;
       case "Stats": return <Stats {...props} />;
@@ -45,15 +46,16 @@ export default function Home() {
   };
 
   if (blueprint) {
+    const sections = Array.isArray(blueprint.sections) ? blueprint.sections : [];
     return (
-      <main className="antialiased overflow-x-hidden selection:bg-black selection:text-white">
+      <main className={`antialiased overflow-x-hidden selection:bg-black selection:text-white ${blueprint.theme === 'spa' ? 'bg-[#f8f6f0]' : 'bg-[#111]'}`}>
         <style dangerouslySetInnerHTML={{__html: `
           @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap');
           .font-gym { font-family: 'Oswald', sans-serif; }
           .font-spa { font-family: 'Cormorant Garamond', serif; }
           .font-sans { font-family: 'Inter', sans-serif; }
         `}} />
-        {blueprint.sections.map((section: any, i: number) => renderSection(section, i))}
+        {sections.map((section: any, i: number) => renderSection(section, i))}
       </main>
     );
   }
