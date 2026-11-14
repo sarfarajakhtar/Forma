@@ -22,7 +22,7 @@ export default function TestPage() {
         .font-sans { font-family: 'Inter', sans-serif; }
       `}} />
 
-      {/* 1. NAVBAR (Fixed) */}
+      {/* 1. NAVBAR */}
       <nav className="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <div className="font-serif text-2xl font-semibold tracking-wide">Lumina.</div>
@@ -38,8 +38,15 @@ export default function TestPage() {
 
       {/* 2. CINEMATIC VIDEO HERO */}
       <section className="relative w-full h-[95vh] flex items-center justify-center overflow-hidden bg-black">
-        <video autoPlay loop muted playsInline className="absolute inset-0 w-full h-full object-cover z-0 opacity-50">
-          <source src="https://videos.pexels.com/video-files/3997799/3997799-hd_1920_1080_25fps.mp4" type="video/mp4" />
+        <video 
+          autoPlay 
+          loop 
+          muted 
+          playsInline 
+          poster="https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1920&q=80"
+          className="absolute inset-0 w-full h-full object-cover z-0 opacity-50"
+        >
+          <source src="https://assets.mixkit.co/videos/preview/mixkit-spa-and-wellness-39953-large.mp4" type="video/mp4" />
         </video>
         
         <motion.div 
