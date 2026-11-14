@@ -6,7 +6,7 @@ export const maxDuration = 300;
 const SYSTEM_PROMPT = `
 You are an elite web design AI. Your job is to output a valid JSON blueprint for a website.
 
-CRITICAL INSTRUCTION: You MUST generate exactly 8 sections. Do not stop after the first one. If you do not generate all 8 sections, the application will crash and fail. 
+CRITICAL INSTRUCTION: You MUST generate exactly 8 sections. Do not stop after the first one. If you do not generate all 8 sections, the application will crash and fail.
 
 You MUST return ONLY a valid JSON object. Do not use markdown. Do not write any conversational text.
 
@@ -49,9 +49,9 @@ export async function POST(req: Request) {
     const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
     const msg = await client.messages.create({
-      model: "claude-3-opus-20240229", // Upgraded to Opus for strict JSON adherence
-      temperature: 0.1, // Low temp to force it to follow the JSON list exactly
-      max_tokens: 4096, 
+      model: "claude-sonnet-4-6", // Active model ID
+      temperature: 0.1, // Low temp to force strict JSON adherence
+      max_tokens: 8192, 
       system: SYSTEM_PROMPT,
       messages: [{ role: "user", content: `Generate the complete JSON blueprint for:\n\n${description}` }]
     });
