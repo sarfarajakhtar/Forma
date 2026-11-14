@@ -7,6 +7,7 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [blueprint, setBlueprint] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
+  const [showDebug, setShowDebug] = useState(false);
 
   async function generate() {
     setLoading(true);
@@ -32,7 +33,6 @@ export default function Home() {
   const renderSection = (section: any, index: number) => {
     if (!section || !section.props) return null;
     
-    // Normalize casing (Hero, hero, HERO all work)
     const type = (section.type || "").toLowerCase();
     const props = { key: index, data: section.props, theme: blueprint?.theme || 'spa' };
 
@@ -51,33 +51,43 @@ export default function Home() {
 
   if (blueprint) {
     const sections = Array.isArray(blueprint.sections) ? blueprint.sections : [];
-    
-    // DEBUG FALLBACK: If the AI returns an empty website, show us why.
-    if (sections.length === 0) {
-      return (
-        <div className="min-h-screen bg-neutral-100 p-8 flex items-center justify-center">
-          <div className="max-w-3xl w-full bg-white p-8 rounded-xl shadow-lg">
-            <h2 className="text-2xl font-bold text-red-600 mb-4">Debug: Empty Website Generated</h2>
-            <p className="text-gray-600 mb-4">The AI responded, but the sections array was empty or missing. Here is the raw data returned:</p>
-            <pre className="bg-gray-100 p-4 rounded-lg text-sm overflow-auto max-h-96">
-              {JSON.stringify(blueprint, null, 2)}
-            </pre>
-            <button onClick={() => setBlueprint(null)} className="mt-6 bg-black text-white px-6 py-2 rounded">Go Back</button>
-          </div>
-        </div>
-      );
-    }
 
     return (
-      <main className={`antialiased overflow-x-hidden selection:bg-black selection:text-white ${blueprint.theme === 'spa' ? 'bg-[#f8f6f0]' : 'bg-[#111]'}`}>
+      <div className={`relative antialiased overflow-x-hidden selection:bg-black selection:text-white ${blueprint.theme === 'spa' ? 'bg-[#f8f6f0]' : 'bg-[#111]'}`}>
         <style dangerouslySetInnerHTML={{__html: `
           @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap');
           .font-gym { font-family: 'Oswald', sans-serif; }
           .font-spa { font-family: 'Cormorant Garamond', serif; }
           .font-sans { font-family: 'Inter', sans-serif; }
         `}} />
-        {sections.map((section: any, i: number) => renderSection(section, i))}
-      </main>
+        
+        {/* Render the sections */}
+        <main>
+          {sections.map((section: any, i: number) => renderSection(section, i))}
+        </main>
+
+        {/* Debug Button & Panel */}
+        <button 
+          onClick={() => setShowDebug(!showDebug)} 
+          className="fixed bottom-4 right-4 bg-black text-white px-4 py-2 rounded-full text-xs font-bold shadow-lg z-50 hover:bg-gray-800"
+        >
+          {showDebug ? "Hide JSON" : "View JSON Data"}
+        </button>
+
+        {showDebug && (
+          <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-6 overflow-auto">
+            <div className="bg-white p-6 rounded-xl max-w-4xl w-full max-h-[80vh] flex flex-col">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-xl font-bold">AI Blueprint Data</h2>
+                <button onClick={() => setShowDebug(false)} className="text-red-500 font-bold">Close</button>
+              </div>
+              <pre className="bg-gray-100 p-4 rounded text-xs overflow-auto flex-1">
+                {JSON.stringify(blueprint, null, 2)}
+              </pre>
+            </div>
+          </div>
+        )}
+      </div>
     );
   }
 
