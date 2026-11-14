@@ -1,17 +1,17 @@
 "use client";
-
 import { useState } from "react";
+import { Hero, Stats, AsymmetricAbout, BentoGrid, EditorialList, Testimonial, FullWidthCTA, Footer } from "@/components/Engine";
 
 export default function Home() {
   const [description, setDescription] = useState("");
   const [loading, setLoading] = useState(false);
-  const [html, setHtml] = useState<string | null>(null);
+  const [blueprint, setBlueprint] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
 
   async function generate() {
     setLoading(true);
     setError(null);
-    setHtml(null);
+    setBlueprint(null);
 
     try {
       const res = await fetch("/api/generate", {
@@ -19,11 +19,9 @@ export default function Home() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ description }),
       });
-      
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Failed to generate.");
-      
-      setHtml(data.html);
+      setBlueprint(data.blueprint);
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -31,53 +29,54 @@ export default function Home() {
     }
   }
 
+  const renderSection = (section: any, index: number) => {
+    const props = { key: index, data: section.props, theme: blueprint.theme };
+    switch (section.type) {
+      case "Hero": return <Hero {...props} />;
+      case "Stats": return <Stats {...props} />;
+      case "AsymmetricAbout": return <AsymmetricAbout {...props} />;
+      case "BentoGrid": return <BentoGrid {...props} />;
+      case "EditorialList": return <EditorialList {...props} />;
+      case "Testimonial": return <Testimonial {...props} />;
+      case "FullWidthCTA": return <FullWidthCTA {...props} />;
+      case "Footer": return <Footer {...props} />;
+      default: return null;
+    }
+  };
+
+  if (blueprint) {
+    return (
+      <main className={`font-sans antialiased overflow-x-hidden selection:bg-black selection:text-white ${blueprint.theme === 'spa' ? 'bg-[#f8f6f0]' : 'bg-[#111]'}`}>
+        <style dangerouslySetInnerHTML={{__html: `
+          @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap');
+          .font-display { font-family: 'Syne', sans-serif; }
+          .font-sans { font-family: 'Inter', sans-serif; }
+          .font-serif { font-family: 'Playfair Display', serif; }
+        `}} />
+        {blueprint.sections.map((section: any, i: number) => renderSection(section, i))}
+      </main>
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-neutral-50 text-neutral-900">
-      <div className="max-w-3xl mx-auto p-8">
-        <h1 className="text-3xl font-semibold mb-2">Forma</h1>
-        <p className="text-neutral-600 mb-8">AI website generator with elite design constraints.</p>
-        
+    <div className="min-h-screen bg-neutral-50 text-neutral-900 flex items-center justify-center p-6">
+      <div className="max-w-2xl w-full">
+        <h1 className="text-3xl font-semibold mb-2">Forma Engine</h1>
+        <p className="text-neutral-600 mb-8">Generate an elite, cinematic website from a prompt.</p>
         <textarea
-          className="block w-full h-32 p-4 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900 bg-white mb-4"
-          placeholder="Describe your business... (e.g. A specialty coffee roaster in Lisbon called Fábrica.)"
+          className="block w-full h-40 p-6 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900 bg-white mb-6 text-lg shadow-sm"
+          placeholder="Describe your business..."
           value={description}
           onChange={(e) => setDescription(e.target.value)}
         />
-        
-        <button 
+        <button
           onClick={generate}
           disabled={loading || description.length < 20}
-          className="bg-neutral-900 text-white px-6 py-3 rounded-lg font-medium hover:bg-neutral-700 transition-colors disabled:opacity-50"
+          className="bg-neutral-900 text-white px-8 py-4 rounded-xl font-medium hover:bg-neutral-700 transition-colors disabled:opacity-50 w-full text-lg shadow-lg"
         >
-          {loading ? "Generating... (Please wait 30-60s)" : "Generate Website"}
+          {loading ? "Assembling Website..." : "Generate Website"}
         </button>
-
-        {error && (
-          <div className="mt-4 p-4 bg-red-50 text-red-700 border border-red-200 rounded-lg">
-            {error}
-          </div>
-        )}
-
-        {html && (
-          <div className="mt-8">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold">Live Preview</h2>
-              <a 
-                href={URL.createObjectURL(new Blob([html], { type: "text/html" }))} 
-                target="_blank" 
-                rel="noreferrer"
-                className="text-sm text-blue-600 hover:underline"
-              >
-                Open in new tab
-              </a>
-            </div>
-            <iframe
-              srcDoc={html}
-              className="w-full h-[800px] border border-neutral-300 rounded-xl bg-white shadow-sm"
-              sandbox="allow-scripts allow-same-origin"
-            />
-          </div>
-        )}
+        {error && <div className="mt-6 p-4 bg-red-50 text-red-700 border border-red-200 rounded-xl">{error}</div>}
       </div>
     </div>
   );
