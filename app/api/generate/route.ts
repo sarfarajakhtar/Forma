@@ -27,7 +27,7 @@ MOTION — animate only transform and opacity. Hover 150-220ms. Respect prefers-
 SECTION ARCHETYPES — pick from these, do not invent layouts:
 Asymmetric split hero (text 55% / visual 45%, not centered) · Full-bleed image hero (text bottom-left, scrim for contrast) · Editorial oversized-type hero (huge headline) · Product mockup hero (mockup floating below copy) · Alternating image/text · Editorial numbered list (big accent numbers, no icons) · Bento grid (mixed sizes, one anchor cell) · Stat band (ONLY if real numbers supplied) · Single large testimonial (ONLY if real quote supplied) · FAQ accordion (max 8) · Split CTA (heading left, button right).
 
-PAGE COMPOSITION — exactly one nav, one hero, one CTA, one footer. 5-9 sections total. No two consecutive sections with same archetype or same background.
+PAGE COMPOSITION — exactly one nav, one hero, one CTA, one footer. Total sections: 4-6. You MUST finish the entire HTML document ending with </html>. Never leave sections empty.. No two consecutive sections with same archetype or same background.
 
 ABSOLUTELY BANNED (auto-reject):
 - Purple, violet, or indigo gradients
@@ -49,7 +49,7 @@ FACTUAL INTEGRITY — never invent facts. Use only what the user supplied. If da
 
 MOBILE — design for 390px width first. Use Tailwind md: and lg: breakpoints. Text must never overflow or clip.
 
-OUTPUT — a complete standalone HTML file using Tailwind CDN <script src="https://cdn.tailwindcss.com"></script> and Google Fonts. No external images — create visuals with CSS gradients, SVG, and typography only. Return ONLY the HTML, no markdown fences.
+OUTPUT — a complete standalone HTML file using Tailwind CDN <script src="https://cdn.tailwindcss.com"></script> and Google Fonts. No external images. Do NOT use complex SVGs. Use clean, flat CSS colors, simple geometry, and bold typography for the design. Return ONLY the HTML, no markdown fences.
 
 WHAT WINNING LOOKS LIKE — a designer could sign this and charge for it. Specific to the business. Composed, not assembled. Distinctive type. No AI tells. Mobile looks as considered as desktop.
 `;
@@ -86,7 +86,9 @@ export async function POST(req: Request) {
 
     html = html.replace(/^```(?:html)?\s*/i, "").replace(/\s*```\s*$/i, "");
 
-    if (!html.startsWith("<!DOCTYPE html>") && !html.startsWith("<html")) {
+        if (!html.startsWith("<!DOCTYPE html>") || !html.endsWith("</html>")) {
+      return NextResponse.json({ error: "The AI ran out of memory and cut off the design. Please try again or use a simpler prompt." }, { status: 500 });
+    }
       return NextResponse.json({ error: "AI returned malformed output. Try again." }, { status: 500 });
     }
 
