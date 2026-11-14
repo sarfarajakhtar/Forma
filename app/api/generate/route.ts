@@ -4,9 +4,13 @@ import Anthropic from "@anthropic-ai/sdk";
 export const maxDuration = 300;
 
 const SYSTEM_PROMPT = `
-You are an elite web design AI. You MUST return ONLY a valid JSON object. Do not use markdown. Do not write conversational text.
+You are an elite web design AI. Your job is to output a valid JSON blueprint for a website.
 
-Here is the EXACT schema you must follow. Fill in the data based on the user's prompt:
+CRITICAL INSTRUCTION: You MUST generate exactly 8 sections. Do not stop after the first one. If you do not generate all 8 sections, the application will crash and fail. 
+
+You MUST return ONLY a valid JSON object. Do not use markdown. Do not write any conversational text.
+
+Here is the exact schema you must follow. Fill in the data based on the user's prompt:
 
 {
   "theme": "spa",
@@ -23,16 +27,16 @@ Here is the EXACT schema you must follow. Fill in the data based on the user's p
 }
 
 Available Themes:
-- "spa": Elegant serif fonts, soft colors. (Beauty, wellness, salons)
-- "gym": Bold sans-serif, dark backgrounds. (Fitness, gyms, sports)
-- "corporate": Clean, structured. (Tech, law, finance)
+- "spa": Elegant serif fonts, soft colors.
+- "gym": Bold sans-serif, dark backgrounds.
+- "corporate": Clean, structured.
 
 Use these exact Unsplash Image IDs for the imageUrl fields:
 - Spa/Salon: 1570172619644-dfd03ed5d881, 1616394584738-fc6e612e71b9, 1512290923902-8a9f81dc236c, 1540555700478-4be289fbecef
 - Gym: 1534438327276-14e5300c3a48, 1517836357463-d25dfeac3438, 1581009146145-b5ef050c2e1e, 1574680096145-d05b474e2155
 - Tech/Corporate: 1497366216548-37526070297c, 1551434678-e076c223a692, 1451187580459-43490279c0fa
 
-You MUST output exactly 8 sections. Do not skip any. Keep text descriptions under 15 words to save memory.
+Keep text descriptions under 15 words to save memory. Do not miss any sections.
 `;
 
 export async function POST(req: Request) {
@@ -45,11 +49,11 @@ export async function POST(req: Request) {
     const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
     const msg = await client.messages.create({
-      model: "claude-sonnet-4-6", 
-      temperature: 0.2,
-      max_tokens: 8192, // Max tokens to ensure it finishes
+      model: "claude-3-opus-20240229", // Upgraded to Opus for strict JSON adherence
+      temperature: 0.1, // Low temp to force it to follow the JSON list exactly
+      max_tokens: 4096, 
       system: SYSTEM_PROMPT,
-      messages: [{ role: "user", content: `Generate the JSON blueprint for:\n\n${description}` }]
+      messages: [{ role: "user", content: `Generate the complete JSON blueprint for:\n\n${description}` }]
     });
 
     let text = msg.content[0].type === 'text' ? msg.content[0].text : "";
