@@ -27,7 +27,7 @@ MOTION — animate only transform and opacity. Hover 150-220ms. Respect prefers-
 SECTION ARCHETYPES — pick from these, do not invent layouts:
 Asymmetric split hero (text 55% / visual 45%, not centered) · Full-bleed image hero (text bottom-left, scrim for contrast) · Editorial oversized-type hero (huge headline) · Product mockup hero (mockup floating below copy) · Alternating image/text · Editorial numbered list (big accent numbers, no icons) · Bento grid (mixed sizes, one anchor cell) · Stat band (ONLY if real numbers supplied) · Single large testimonial (ONLY if real quote supplied) · FAQ accordion (max 8) · Split CTA (heading left, button right).
 
-PAGE COMPOSITION — exactly one nav, one hero, one CTA, one footer. Total sections: 4-6. You MUST finish the entire HTML document ending with </html>. Never leave sections empty.. No two consecutive sections with same archetype or same background.
+PAGE COMPOSITION — exactly one nav, one hero, one CTA, one footer. Total sections: 4-6. You MUST finish the entire HTML document ending with </html>. Never leave sections empty. No two consecutive sections with same archetype or same background.
 
 ABSOLUTELY BANNED (auto-reject):
 - Purple, violet, or indigo gradients
@@ -84,12 +84,12 @@ export async function POST(req: Request) {
       html = msg.content[0].text;
     }
 
+    // Clean up any markdown blocks the AI might have accidentally added
     html = html.replace(/^```(?:html)?\s*/i, "").replace(/\s*```\s*$/i, "");
 
-        if (!html.startsWith("<!DOCTYPE html>") || !html.endsWith("</html>")) {
-      return NextResponse.json({ error: "The AI ran out of memory and cut off the design. Please try again or use a simpler prompt." }, { status: 500 });
-    }
-      return NextResponse.json({ error: "AI returned malformed output. Try again." }, { status: 500 });
+    // Safety check: Ensure the AI didn't run out of memory and cut off the code
+    if (!html.startsWith("<!DOCTYPE html>") || !html.endsWith("</html>")) {
+      return NextResponse.json({ error: "The AI ran out of memory and cut off the design. Please try again or use a slightly simpler prompt." }, { status: 500 });
     }
 
     return NextResponse.json({ html });
