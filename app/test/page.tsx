@@ -1,6 +1,6 @@
-import CinematicVideoHero from "@/components/CinematicVideoHero";
-import AsymmetricBentoGrid from "@/components/AsymmetricBentoGrid";
-import EditorialFeatureList from "@/components/EditorialFeatureList";
+import CinematicVideoHero from "../../components/CinematicVideoHero";
+import AsymmetricBentoGrid from "../../components/AsymmetricBentoGrid";
+import EditorialFeatureList from "../../components/EditorialFeatureList";
 
 export default function TestPage() {
   return (
