@@ -7,7 +7,6 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [blueprint, setBlueprint] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
-  const [showDebug, setShowDebug] = useState(false);
 
   async function generate() {
     setLoading(true);
@@ -59,32 +58,25 @@ export default function Home() {
           .font-gym { font-family: 'Oswald', sans-serif; }
           .font-spa { font-family: 'Cormorant Garamond', serif; }
           .font-sans { font-family: 'Inter', sans-serif; }
+          html { scroll-behavior: smooth; }
         `}} />
         
-        <main>
+        {/* Sticky Navigation Bar to prove sections exist */}
+        <nav className={`fixed top-0 w-full z-50 border-b backdrop-blur-md ${blueprint.theme === 'spa' ? 'bg-[#f8f6f0]/80 border-gray-200 text-black' : 'bg-[#111]/80 border-white/10 text-white'}`}>
+          <div className="max-w-[90rem] mx-auto px-6 h-16 flex items-center justify-center gap-6 md:gap-10 text-xs font-bold uppercase tracking-widest">
+            <a href="#hero" className="hover:opacity-50 transition-opacity">Hero</a>
+            <a href="#stats" className="hover:opacity-50 transition-opacity">Stats</a>
+            <a href="#about" className="hover:opacity-50 transition-opacity">About</a>
+            <a href="#features" className="hover:opacity-50 transition-opacity">Features</a>
+            <a href="#process" className="hover:opacity-50 transition-opacity">Process</a>
+            <a href="#testimonial" className="hover:opacity-50 transition-opacity">Reviews</a>
+            <a href="#cta" className="hover:opacity-50 transition-opacity">Book</a>
+          </div>
+        </nav>
+
+        <main className="pt-16">
           {sections.map((section: any, i: number) => renderSection(section, i))}
         </main>
-
-        <button 
-          onClick={() => setShowDebug(!showDebug)} 
-          className="fixed bottom-4 right-4 bg-black text-white px-4 py-2 rounded-full text-xs font-bold shadow-lg z-50 hover:bg-gray-800"
-        >
-          {showDebug ? "Hide JSON" : "View JSON Data"}
-        </button>
-
-        {showDebug && (
-          <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-6 overflow-auto">
-            <div className="bg-white p-6 rounded-xl max-w-4xl w-full max-h-[80vh] flex flex-col">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-bold">AI Blueprint Data</h2>
-                <button onClick={() => setShowDebug(false)} className="text-red-500 font-bold">Close</button>
-              </div>
-              <pre className="bg-gray-100 p-4 rounded text-xs overflow-auto flex-1">
-                {JSON.stringify(blueprint, null, 2)}
-              </pre>
-            </div>
-          </div>
-        )}
       </div>
     );
   }
