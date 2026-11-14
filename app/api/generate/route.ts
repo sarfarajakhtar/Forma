@@ -41,7 +41,7 @@ export async function POST(req: Request) {
     const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
     const msg = await client.messages.create({
-      model: "claude-3-5-sonnet-20241022", 
+      model: "claude-sonnet-4-6", // Using the current, valid Sonnet model
       temperature: 0.2,
       max_tokens: 6000, // Increased to ensure it finishes all 8 sections
       system: SYSTEM_PROMPT,
@@ -50,14 +50,17 @@ export async function POST(req: Request) {
 
     let text = msg.content[0].type === 'text' ? msg.content[0].text : "";
     
+    // Safely extract JSON even if the AI adds conversational text around it
     const jsonMatch = text.match(/\{[\s\S]*\}/);
-    if (!jsonMatch) throw new Error("AI did not return valid JSON.");
+    if (!jsonMatch) {
+      throw new Error("AI did not return valid JSON structure.");
+    }
 
     const jsonBlueprint = JSON.parse(jsonMatch[0]);
     return NextResponse.json({ blueprint: jsonBlueprint });
 
   } catch (error: any) {
     console.error("API Error:", error);
-    return NextResponse.json({ error: error.message || "Failed to generate." }, { status: 500 });
+    return NextResponse.json({ error: error.message || "Failed to generate. Try again." }, { status: 500 });
   }
 }
