@@ -4,54 +4,37 @@ import Anthropic from "@anthropic-ai/sdk";
 export const maxDuration = 300;
 
 const DESIGN_SYSTEM_PROMPT = `
-You are designing for an elite web design studio, not generating a template. Every rule below is enforced.
+You are designing for an elite web design studio. Every rule below is enforced.
+
+CRITICAL CODE RULES:
+- Return ONLY raw HTML. NO markdown fences, NO HTML comments (<!-- -->), NO massive SVG blocks.
+- Keep the code highly optimized and short. Use Tailwind utility classes for everything.
+- You MUST finish the entire document ending with </html>.
+- Total sections: 3 to 4. (e.g., Nav, Hero, Features, Footer). Do not over-complicate the layout.
 
 TYPOGRAPHY — choose ONE font pair. Never Inter alone:
-- Fraunces + Inter Tight (editorial, premium, crafted)
-- Instrument Serif + Inter Tight (refined, contemporary)
-- Playfair Display + Source Sans 3 (established, trustworthy)
-- Space Grotesk + Inter Tight (technical, modern)
-- DM Serif Display + DM Sans (warm, approachable)
-- Bricolage Grotesque + Inter Tight (bold, distinctive)
+- Fraunces + Inter Tight · Instrument Serif + Inter Tight · Playfair Display + Source Sans 3 · Space Grotesk + Inter Tight · DM Serif Display + DM Sans · Bricolage Grotesque + Inter Tight
 
-Type sizes: display clamp(3rem,6vw,5.5rem) lh 0.95 ls -0.03em; h2 clamp(2rem,3.2vw,3rem) lh 1.08 ls -0.02em; body 1rem lh 1.65.
+SPACING — strict 8pt grid: 0,4,8,12,16,24,32,40,48,64,80,96,128px. Section padding 96px.
 
-SPACING — strict 8pt grid: 0,4,8,12,16,24,32,40,48,64,80,96,128,160px only. Section padding 96-128px desktop, 64-80px mobile.
+COLOR — neutral base + exactly ONE accent: terracotta, forest, navy, plum, ochre, clay, sage, or ink. Never pure #000 or #fff.
 
-COLOR — neutral base + exactly ONE accent: terracotta, forest, navy, plum, ochre, clay, sage, or ink. Never pure #000 or #fff. Body text contrast >= 4.5:1.
-
-RADII — buttons/inputs 8px, cards 12px, media 16px.
-
-MOTION — animate only transform and opacity. Hover 150-220ms. Respect prefers-reduced-motion.
+RADII — buttons 8px, cards 12px, media 16px.
 
 SECTION ARCHETYPES — pick from these, do not invent layouts:
-Asymmetric split hero (text 55% / visual 45%, not centered) · Full-bleed image hero (text bottom-left, scrim for contrast) · Editorial oversized-type hero (huge headline) · Product mockup hero (mockup floating below copy) · Alternating image/text · Editorial numbered list (big accent numbers, no icons) · Bento grid (mixed sizes, one anchor cell) · Stat band (ONLY if real numbers supplied) · Single large testimonial (ONLY if real quote supplied) · FAQ accordion (max 8) · Split CTA (heading left, button right).
+Asymmetric split hero (text 55% / visual 45%) · Full-bleed image hero (text bottom-left) · Editorial oversized-type hero · Alternating image/text · Bento grid. Do NOT use three identical icon cards.
 
-PAGE COMPOSITION — exactly one nav, one hero, one CTA, one footer. Total sections: 4-6. You MUST finish the entire HTML document ending with </html>. Never leave sections empty. No two consecutive sections with same archetype or same background.
+ABSOLUTELY BANNED:
+- Purple/violet gradients · Inter as the only font · Center-aligning everything · Emoji as icons.
+- "Lorem ipsum", "Acme", "Your Company", "Welcome to our website", "Unlock your potential".
+- Invented testimonials, statistics, awards, phone numbers, or addresses.
+- Pure #000 or #fff for text/backgrounds.
 
-ABSOLUTELY BANNED (auto-reject):
-- Purple, violet, or indigo gradients
-- Inter as the only typeface
-- Every section center-aligned (more than 40%)
-- Three identical icon cards as the only feature section
-- Emoji used as icons
-- "Lorem ipsum", "Acme", "Your Company", "Welcome to our website", "Unlock your potential", "Elevate your brand"
-- Invented testimonials (John Doe, Sarah Johnson, etc.)
-- Invented statistics, awards, phone numbers, addresses, years in business
-- Gradient text (background-clip: text)
-- Pure #000 or #fff for text or backgrounds
-- Spacing values outside the 8pt scale
-- Section padding over 160px
-- Interactive elements with no hover state
-- Interactive elements with no focus-visible ring
+FACTUAL INTEGRITY — Use ONLY what the user supplied. If data is missing, omit the section.
 
-FACTUAL INTEGRITY — never invent facts. Use only what the user supplied. If data is missing, omit the section entirely.
+MOBILE — design for 390px width first. Use Tailwind md: and lg: breakpoints.
 
-MOBILE — design for 390px width first. Use Tailwind md: and lg: breakpoints. Text must never overflow or clip.
-
-OUTPUT — a complete standalone HTML file using Tailwind CDN <script src="https://cdn.tailwindcss.com"></script> and Google Fonts. No external images. Do NOT use complex SVGs. Use clean, flat CSS colors, simple geometry, and bold typography for the design. Return ONLY the HTML, no markdown fences.
-
-WHAT WINNING LOOKS LIKE — a designer could sign this and charge for it. Specific to the business. Composed, not assembled. Distinctive type. No AI tells. Mobile looks as considered as desktop.
+OUTPUT — A complete standalone HTML file using Tailwind CDN <script src="https://cdn.tailwindcss.com"></script> and Google Fonts. Use flat CSS colors and simple geometry. Do NOT use complex SVGs or external images. Return ONLY the HTML.
 `;
 
 export async function POST(req: Request) {
@@ -67,14 +50,14 @@ export async function POST(req: Request) {
     });
 
     const msg = await client.messages.create({
-      model: "claude-sonnet-4-6",
+      model: "claude-3-5-sonnet-20241022",
       temperature: 0.2,
       max_tokens: 8192,
       system: DESIGN_SYSTEM_PROMPT,
       messages: [
         { 
           role: "user", 
-          content: `Generate a complete landing page for this business:\n\n${description}\n\nPick the font pair and accent that best fit. Then design and build.` 
+          content: `Generate a complete landing page for this business:\n\n${description}\n\nPick the font pair and accent that best fit. Keep the code short and concise.` 
         }
       ]
     });
@@ -84,12 +67,16 @@ export async function POST(req: Request) {
       html = msg.content[0].text;
     }
 
-    // Clean up any markdown blocks the AI might have accidentally added
-    html = html.replace(/^```(?:html)?\s*/i, "").replace(/\s*```\s*$/i, "");
+    // Clean up markdown
+    html = html.replace(/^```(?:html)?\s*/i, "").replace(/\s*```\s*$/i, "").trim();
 
-    // Safety check: Ensure the AI didn't run out of memory and cut off the code
-    if (!html.startsWith("<!DOCTYPE html>") || !html.endsWith("</html>")) {
-      return NextResponse.json({ error: "The AI ran out of memory and cut off the design. Please try again or use a slightly simpler prompt." }, { status: 500 });
+    // Safety check: Ensure it starts with <!DOCTYPE and ends with </html>
+    if (!html.startsWith("<!DOCTYPE html>") && !html.startsWith("<html")) {
+      return NextResponse.json({ error: "AI returned malformed output. Try again." }, { status: 500 });
+    }
+    
+    if (!html.endsWith("</html>")) {
+      return NextResponse.json({ error: "The AI got cut off. Please try again or make the business description slightly shorter." }, { status: 500 });
     }
 
     return NextResponse.json({ html });
