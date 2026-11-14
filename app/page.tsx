@@ -46,12 +46,12 @@ export default function Home() {
 
   if (blueprint) {
     return (
-      <main className={`font-sans antialiased overflow-x-hidden selection:bg-black selection:text-white ${blueprint.theme === 'spa' ? 'bg-[#f8f6f0]' : 'bg-[#111]'}`}>
+      <main className="antialiased overflow-x-hidden selection:bg-black selection:text-white">
         <style dangerouslySetInnerHTML={{__html: `
-          @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap');
-          .font-display { font-family: 'Syne', sans-serif; }
+          @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap');
+          .font-gym { font-family: 'Oswald', sans-serif; }
+          .font-spa { font-family: 'Cormorant Garamond', serif; }
           .font-sans { font-family: 'Inter', sans-serif; }
-          .font-serif { font-family: 'Playfair Display', serif; }
         `}} />
         {blueprint.sections.map((section: any, i: number) => renderSection(section, i))}
       </main>
@@ -59,10 +59,10 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-neutral-50 text-neutral-900 flex items-center justify-center p-6">
+    <div className="min-h-screen bg-neutral-50 text-neutral-900 flex items-center justify-center p-6 font-sans">
       <div className="max-w-2xl w-full">
         <h1 className="text-3xl font-semibold mb-2">Forma Engine</h1>
-        <p className="text-neutral-600 mb-8">Generate an elite, cinematic website from a prompt.</p>
+        <p className="text-neutral-600 mb-8">Generate an elite website from a prompt.</p>
         <textarea
           className="block w-full h-40 p-6 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900 bg-white mb-6 text-lg shadow-sm"
           placeholder="Describe your business..."
