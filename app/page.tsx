@@ -31,22 +31,43 @@ export default function Home() {
 
   const renderSection = (section: any, index: number) => {
     if (!section || !section.props) return null;
+    
+    // Normalize casing (Hero, hero, HERO all work)
+    const type = (section.type || "").toLowerCase();
     const props = { key: index, data: section.props, theme: blueprint?.theme || 'spa' };
-    switch (section.type) {
-      case "Hero": return <Hero {...props} />;
-      case "Stats": return <Stats {...props} />;
-      case "AsymmetricAbout": return <AsymmetricAbout {...props} />;
-      case "BentoGrid": return <BentoGrid {...props} />;
-      case "EditorialList": return <EditorialList {...props} />;
-      case "Testimonial": return <Testimonial {...props} />;
-      case "FullWidthCTA": return <FullWidthCTA {...props} />;
-      case "Footer": return <Footer {...props} />;
+
+    switch (type) {
+      case "hero": return <Hero {...props} />;
+      case "stats": return <Stats {...props} />;
+      case "asymmetricabout": return <AsymmetricAbout {...props} />;
+      case "bentogrid": return <BentoGrid {...props} />;
+      case "editoriallist": return <EditorialList {...props} />;
+      case "testimonial": return <Testimonial {...props} />;
+      case "fullwidthcta": return <FullWidthCTA {...props} />;
+      case "footer": return <Footer {...props} />;
       default: return null;
     }
   };
 
   if (blueprint) {
     const sections = Array.isArray(blueprint.sections) ? blueprint.sections : [];
+    
+    // DEBUG FALLBACK: If the AI returns an empty website, show us why.
+    if (sections.length === 0) {
+      return (
+        <div className="min-h-screen bg-neutral-100 p-8 flex items-center justify-center">
+          <div className="max-w-3xl w-full bg-white p-8 rounded-xl shadow-lg">
+            <h2 className="text-2xl font-bold text-red-600 mb-4">Debug: Empty Website Generated</h2>
+            <p className="text-gray-600 mb-4">The AI responded, but the sections array was empty or missing. Here is the raw data returned:</p>
+            <pre className="bg-gray-100 p-4 rounded-lg text-sm overflow-auto max-h-96">
+              {JSON.stringify(blueprint, null, 2)}
+            </pre>
+            <button onClick={() => setBlueprint(null)} className="mt-6 bg-black text-white px-6 py-2 rounded">Go Back</button>
+          </div>
+        </div>
+      );
+    }
+
     return (
       <main className={`antialiased overflow-x-hidden selection:bg-black selection:text-white ${blueprint.theme === 'spa' ? 'bg-[#f8f6f0]' : 'bg-[#111]'}`}>
         <style dangerouslySetInnerHTML={{__html: `
