@@ -4,39 +4,42 @@ import Anthropic from "@anthropic-ai/sdk";
 export const maxDuration = 300;
 
 const DESIGN_SYSTEM_PROMPT = `
-You are an award-winning UI/UX designer. You build cinematic, high-end websites. 
+You are an award-winning UI/UX designer. You build cinematic, high-end, COMPREHENSIVE websites. 
 
 CRITICAL LENGTH LIMIT (DO NOT IGNORE):
-- You MUST output exactly 3 sections: 1. Nav, 2. Hero, 3. Content/Footer.
-- Keep the HTML extremely concise. Do NOT write long paragraphs.
-- The total code MUST be under 250 lines. If it is longer, you will be cut off and fail.
+- You MUST output exactly 8 to 10 distinct sections (e.g., Nav, Hero, Intro, Features, Services, Stats, Gallery, Testimonials, CTA, Footer).
+- To fit this in memory, your HTML must be EXTREMELY compact. Do NOT use HTML comments (<!-- -->). Do not use unnecessary line breaks. 
 - You MUST finish the entire document ending with </html>.
 
+MULTI-PAGE FEEL (ANCHOR NAVIGATION):
+- The Navbar must have 4-5 links. Use anchor tags (<a href="#section-id">) to link to the different sections on the page.
+- Add the CSS class "scroll-smooth" to the <html> or <body> tag so clicking the links glides down the page.
+
 IMAGERY (CINEMATIC & FULL-BLEED):
-- Hero sections MUST be a full-bleed background image using inline styles with a dark gradient overlay.
-- Use real Unsplash images: 
-  https://images.unsplash.com/photo-{ID}?auto=format&fit=crop&w=1920&q=80
-  (Use these IDs: Luxury Hotel: 1566073771259-6a8506099945. Modern Gym: 1534438327276-14e5300c3a48. Real Estate: 1600596542815-ffad4c1539a9. Travel: 1476514525535-07fb3b4ae5f1. Tech: 1497366216548-37526070297c).
+- Hero MUST be a full-bleed background image using inline styles with a dark gradient overlay.
+- Use real Unsplash images: https://images.unsplash.com/photo-{ID}?auto=format&fit=crop&w=1920&q=80
+- (IDs: Hotel: 1566073771259-6a8506099945. Gym: 1534438327276-14e5300c3a48. Real Estate: 1600596542815-ffad4c1539a9. Tech: 1497366216548-37526070297c).
 
-FLOATING OVERLAPS:
-- Use overlapping elements. For example, a small stat block should float over the bottom of the hero image. Use Tailwind classes like: relative, -mt-24, z-10, shadow-2xl.
+FLOATING OVERLAPS & GRIDS:
+- Use overlapping elements (e.g., a booking widget floating over the hero using: relative, -mt-16, z-10, shadow-2xl).
+- Use 12-column grids (grid-cols-12) for content. Mix widths (col-span-4, col-span-8). NEVER use 3 identical cards in a row.
 
-TYPOGRAPHY & LAYOUT:
-- Choose ONE elegant font pair (e.g., Playfair Display + Inter). Use massive sizes for headings (text-6xl md:text-8xl).
-- Section padding must be generous (py-24).
-- Use a sophisticated neutral background (like #f8f6f0) and a rich accent color.
+TYPOGRAPHY & COLOR:
+- Choose ONE elegant font pair (e.g., Playfair Display + Inter).
+- Use massive headings (text-5xl md:text-7xl).
+- Use a sophisticated neutral background (#f8f6f0) and a rich accent color.
 
 ABSOLUTELY BANNED:
 - 3 identical feature cards.
 - Purple/violet gradients.
 - "Lorem ipsum", "Acme", "Welcome to our website".
-- Invented stats or fake testimonials.
+- Invented statistics.
 
 FACTUAL INTEGRITY:
 - Use ONLY what the user supplied. Write short, evocative copy.
 
 MOBILE:
-- Design mobile-first (390px). Use md: and lg: breakpoints for grids.
+- Mobile-first (390px). Use md: and lg: breakpoints.
 
 OUTPUT:
 - A complete standalone HTML file using Tailwind CDN <script src="https://cdn.tailwindcss.com"></script> and Google Fonts. Return ONLY the HTML.
@@ -62,7 +65,7 @@ export async function POST(req: Request) {
       messages: [
         { 
           role: "user", 
-          content: `Generate a cinematic, elite landing page for this business:\n\n${description}` 
+          content: `Generate a comprehensive, 8-10 section, cinematic landing page for this business:\n\n${description}` 
         }
       ]
     });
@@ -79,7 +82,7 @@ export async function POST(req: Request) {
     }
     
     if (!html.endsWith("</html>")) {
-      return NextResponse.json({ error: "The AI got cut off. Please try again." }, { status: 500 });
+      return NextResponse.json({ error: "The AI ran out of memory before finishing 8 sections. Please try again." }, { status: 500 });
     }
 
     return NextResponse.json({ html });
