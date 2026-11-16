@@ -7,9 +7,9 @@ export const Navbar = () => (
     <div className="max-w-[90rem] mx-auto px-6 h-20 flex items-center justify-between text-white">
       <div className="font-serif text-2xl tracking-widest uppercase">Lumina.</div>
       <div className="hidden md:flex gap-8 text-xs font-bold uppercase tracking-[0.2em]">
-        <a href="#" className="hover:text-gray-300 transition-colors">Treatments</a>
-        <a href="#" className="hover:text-gray-300 transition-colors">Philosophy</a>
-        <a href="#" className="hover:text-gray-300 transition-colors">Journal</a>
+        <a href="#treatments" className="hover:text-gray-300 transition-colors">Treatments</a>
+        <a href="#gallery" className="hover:text-gray-300 transition-colors">Gallery</a>
+        <a href="#faq" className="hover:text-gray-300 transition-colors">FAQ</a>
       </div>
       <button className="border border-white px-6 py-2.5 text-xs font-bold uppercase tracking-widest hover:bg-white hover:text-black transition-colors">
         Book Now
@@ -20,7 +20,7 @@ export const Navbar = () => (
 
 export const Hero = () => (
   <section className="relative w-full h-screen flex flex-col justify-center overflow-hidden bg-black">
-    {/* Reliable Video Background with Poster Fallback */}
+    {/* Reliable Video Background */}
     <video 
       autoPlay 
       loop 
@@ -29,7 +29,7 @@ export const Hero = () => (
       poster="https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1920&q=80"
       className="absolute inset-0 w-full h-full object-cover z-0 opacity-50"
     >
-      <source src="https://videos.pexels.com/video-files/3997799/3997799-hd_1920_1080_25fps.mp4" type="video/mp4" />
+      <source src="https://assets.mixkit.co/videos/preview/mixkit-aerial-view-of-a-tropical-beach-1089-large.mp4" type="video/mp4" />
     </video>
     
     <div className="absolute inset-0 bg-gradient-to-t from-[#1a1a1a] via-black/20 to-black/40 z-10"></div>
@@ -88,7 +88,7 @@ export const OverlappingStats = () => (
 );
 
 export const BentoGrid = () => (
-  <section className="py-32 bg-[#1a1a1a]">
+  <section id="treatments" className="py-32 bg-[#1a1a1a]">
     <div className="max-w-[90rem] mx-auto px-6 md:px-12">
       <h2 className="text-5xl md:text-7xl mb-16 text-white font-serif">Our Signature Treatments</h2>
       <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
@@ -100,7 +100,7 @@ export const BentoGrid = () => (
           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
           <div className="absolute bottom-0 p-10">
             <h3 className="text-4xl mb-3 text-white font-serif">Botox & Neuromodulators</h3>
-            <p className="text-white/80 text-lg max-w-md">Smooth fine lines and restore youthful expression with precision-placed injections.</p>
+            <p className="text-white/80 text-lg max-w-md">Smooth fine lines and restore youthful expression.</p>
           </div>
         </motion.div>
         
@@ -130,6 +130,27 @@ export const BentoGrid = () => (
   </section>
 );
 
+export const Gallery = () => (
+  <section id="gallery" className="py-32 bg-[#f8f6f0]">
+    <div className="max-w-[90rem] mx-auto px-6 md:px-12">
+      <h2 className="text-5xl md:text-7xl mb-16 text-gray-900 font-serif text-center">The Lumina Space</h2>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {[
+          "https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=600&q=80",
+          "https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=600&q=80",
+          "https://images.unsplash.com/photo-1552693673-1bf958298935?auto=format&fit=crop&w=600&q=80",
+          "https://images.unsplash.com/photo-1598440947619-2c3f80f2b136?auto=format&fit=crop&w=600&q=80"
+        ].map((img, i) => (
+          <motion.img 
+            key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.1 }}
+            src={img} className="w-full h-64 md:h-80 object-cover rounded-xl" alt={`Gallery ${i}`} 
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+);
+
 export const EditorialList = () => (
   <section className="py-32 bg-white">
     <div className="max-w-[90rem] mx-auto px-6 md:px-12">
@@ -151,6 +172,32 @@ export const EditorialList = () => (
             </div>
             <div className="mt-6 md:mt-0 text-3xl group-hover:translate-x-4 transition-transform duration-300">→</div>
           </motion.div>
+        ))}
+      </div>
+    </div>
+  </section>
+);
+
+export const FAQ = () => (
+  <section id="faq" className="py-32 bg-[#1a1a1a] text-white">
+    <div className="max-w-4xl mx-auto px-6">
+      <h2 className="text-5xl md:text-7xl mb-16 font-serif text-center">Frequently Asked</h2>
+      <div className="space-y-6">
+        {[
+          { q: "Do I need a consultation?", a: "Yes, for all injectable and laser treatments, we require a brief consultation to ensure safety." },
+          { q: "What is your cancellation policy?", a: "We require 24 hours notice for cancellations to avoid a fee." },
+          { q: "Are your treatments painful?", a: "We prioritize your comfort. Most treatments involve minimal discomfort." }
+        ].map((faq, i) => (
+          <motion.details 
+            key={i} initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ delay: i * 0.2 }}
+            className="group border-b border-white/20 pb-6 cursor-pointer"
+          >
+            <summary className="text-xl font-medium list-none flex justify-between items-center">
+              {faq.q}
+              <span className="text-2xl group-open:rotate-45 transition-transform">+</span>
+            </summary>
+            <p className="mt-4 text-gray-400 font-light">{faq.a}</p>
+          </motion.details>
         ))}
       </div>
     </div>
