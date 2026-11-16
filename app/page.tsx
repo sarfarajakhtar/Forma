@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { Navbar, Hero, OverlappingStats, BentoGrid, Gallery, EditorialList, FAQ, Testimonial, Footer } from "../components/Engine";
+import { Navbar, Hero, OverlappingStats, AsymmetricAbout, BentoGrid, Gallery, EditorialList, FAQ, Testimonial, Footer } from "../components/Engine";
 
 export default function Home() {
   const [description, setDescription] = useState("");
@@ -37,6 +37,7 @@ export default function Home() {
     switch (type) {
       case "hero": return <Hero {...props} />;
       case "overlappingstats": return <OverlappingStats {...props} />;
+      case "asymmetricabout": return <AsymmetricAbout {...props} />;
       case "bentogrid": return <BentoGrid {...props} />;
       case "gallery": return <Gallery {...props} />;
       case "editoriallist": return <EditorialList {...props} />;
