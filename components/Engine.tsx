@@ -22,31 +22,46 @@ export const Navbar = ({ theme }: any) => {
 };
 
 export const Hero = ({ data = {}, theme }: any) => {
-  const isGym = theme === "gym";
   const fallbackImage = "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=1920&q=80";
 
   return (
     <section className="relative w-full h-screen flex flex-col justify-center overflow-hidden bg-black">
-      {/* Cinematic Video + Image Fallback */}
       <video autoPlay loop muted playsInline poster={fallbackImage} className="absolute inset-0 w-full h-full object-cover z-0 opacity-40">
         <source src="https://videos.pexels.com/video-files/3129595/3129595-hd_1920_1080_25fps.mp4" type="video/mp4" />
       </video>
       
-      {/* Brand Motif: Industrial Grid Overlay */}
+      {/* Brand Motif */}
       <div className="absolute inset-0 z-10 opacity-10" style={{ backgroundImage: 'linear-gradient(#ffffff 1px, transparent 1px), linear-gradient(90deg, #ffffff 1px, transparent 1px)', backgroundSize: '40px 40px' }}></div>
-      
       <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-black/40 to-black/60 z-10"></div>
       
       <div className="relative z-20 w-full max-w-[90rem] mx-auto px-6 md:px-12 pt-32 pb-20">
-        <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 0.2 }} className={`leading-[0.95] text-white tracking-tighter uppercase font-bold text-[10vw] md:text-[7vw] max-w-4xl`}>
+        <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 0.2 }} className="leading-[0.95] text-white tracking-tighter uppercase font-sans font-bold text-[10vw] md:text-[7vw] max-w-4xl">
           {data.headline || "Forge Your Strength."}
         </motion.h1>
         <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1, delay: 0.6 }} className="text-gray-300 text-lg md:text-2xl max-w-2xl mt-8 mb-12 font-light">
           {data.subheadline || "Brooklyn's elite members-only powerlifting sanctuary."}
         </motion.p>
-        <motion.button initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.8 }} className={`px-12 py-5 uppercase tracking-widest text-xs font-bold transition-transform hover:scale-105 duration-300 bg-lime-400 text-black`}>
+        <motion.button initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.8 }} className="px-12 py-5 uppercase tracking-widest text-xs font-bold transition-transform hover:scale-105 duration-300 bg-lime-400 text-black">
           {data.ctaText || "Apply For Membership"}
         </motion.button>
+      </div>
+    </section>
+  );
+};
+
+export const AsymmetricAbout = ({ data = {}, theme }: any) => {
+  const isGym = theme === "gym";
+  return (
+    // 02 / IDENTITY - Dark Charcoal to separate from Hero
+    <section className={`py-32 overflow-hidden ${isGym ? 'bg-[#161616]' : 'bg-white'}`}>
+      <div className="max-w-[90rem] mx-auto px-6 md:px-12 grid grid-cols-1 md:grid-cols-12 gap-16 items-center">
+        <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }} className="md:col-span-6">
+          <h2 className={`text-4xl md:text-6xl leading-[1.05] mb-8 uppercase font-sans font-bold ${isGym ? 'text-white' : 'text-gray-900'}`}>{data.title || "Built for the serious."}</h2>
+          <p className={`text-lg leading-relaxed font-light mb-10 ${isGym ? 'text-gray-400' : 'text-gray-600'}`}>{data.desc || ""}</p>
+        </motion.div>
+        <motion.div initial={{ opacity: 0, x: 50 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }} className="md:col-span-5 md:col-start-8 relative h-[500px]">
+          {data.imageUrl && <img src={data.imageUrl} className="w-full h-full object-cover" alt="About" />}
+        </motion.div>
       </div>
     </section>
   );
@@ -55,9 +70,10 @@ export const Hero = ({ data = {}, theme }: any) => {
 export const BentoGrid = ({ data = {}, theme }: any) => {
   const isGym = theme === "gym";
   return (
+    // 03 / DIFFERENCE - Back to Black to contrast with About
     <section id="services" className={`py-32 ${isGym ? 'bg-[#0a0a0a]' : 'bg-[#1a1a1a]'}`}>
       <div className="max-w-[90rem] mx-auto px-6 md:px-12">
-        <h2 className={`text-4xl md:text-6xl mb-16 text-white uppercase font-bold tracking-tight`}>{data.title || "What We Offer"}</h2>
+        <h2 className={`text-4xl md:text-6xl mb-16 text-white uppercase font-sans font-bold tracking-tight`}>{data.title || "What We Offer"}</h2>
         
         <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
           {Array.isArray(data.items) && data.items.map((item: any, i: number) => {
@@ -67,7 +83,7 @@ export const BentoGrid = ({ data = {}, theme }: any) => {
                 {item.imageUrl && <img src={item.imageUrl} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110 grayscale group-hover:grayscale-0" alt={item.title} />}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
                 <div className="absolute bottom-0 p-8 md:p-10">
-                  <h3 className={`text-2xl md:text-3xl mb-2 text-white uppercase font-bold`}>{item.title || ""}</h3>
+                  <h3 className="text-2xl md:text-3xl mb-2 text-white uppercase font-sans font-bold">{item.title || ""}</h3>
                   <p className="text-gray-400 text-sm md:text-base max-w-md opacity-0 group-hover:opacity-100 transition-opacity duration-500">{item.desc || ""}</p>
                 </div>
               </motion.div>
@@ -82,41 +98,25 @@ export const BentoGrid = ({ data = {}, theme }: any) => {
 export const Timeline = ({ data = {}, theme }: any) => {
   const isGym = theme === "gym";
   return (
-    <section id="process" className={`py-32 ${isGym ? 'bg-[#f8f6f0] text-black' : 'bg-white'}`}>
+    // 04 / CONVERSION RHYTHM BREAK - Massive Lime Green Block
+    <section id="process" className={`py-32 ${isGym ? 'bg-lime-400 text-black' : 'bg-[#f8f6f0] text-black'}`}>
       <div className="max-w-[90rem] mx-auto px-6 md:px-12">
-        <h2 className={`text-4xl md:text-7xl mb-24 uppercase font-bold tracking-tighter`}>{data.title || "The Method"}</h2>
+        <h2 className="text-4xl md:text-7xl mb-24 uppercase font-sans font-bold tracking-tighter">{data.title || "The Method"}</h2>
         
-        <div className="flex flex-col border-l-2 border-black/20 pl-6 md:pl-12 gap-16">
+        <div className={`flex flex-col border-l-2 pl-6 md:pl-12 gap-16 ${isGym ? 'border-black/20' : 'border-gray-300'}`}>
           {Array.isArray(data.items) && data.items.map((item: any, i: number) => (
             <motion.div key={i} initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: i * 0.2 }} className="relative">
               {/* Overlapping Number Motif */}
-              <div className="absolute -left-12 md:-left-24 -top-10 text-[6rem] md:text-[10rem] font-bold text-black/5 leading-none select-none z-0">
+              <div className={`absolute -left-12 md:-left-24 -top-10 text-[6rem] md:text-[10rem] font-bold leading-none select-none z-0 ${isGym ? 'text-black/10' : 'text-black/5'}`}>
                 {item.num || "01"}
               </div>
               <div className="relative z-10">
-                <h3 className={`text-3xl md:text-5xl mb-4 uppercase font-bold`}>{item.title || ""}</h3>
-                <p className="text-gray-600 text-lg max-w-2xl font-medium">{item.desc || ""}</p>
+                <h3 className="text-3xl md:text-5xl mb-4 uppercase font-sans font-bold">{item.title || ""}</h3>
+                <p className={`text-lg max-w-2xl font-medium ${isGym ? 'text-black/70' : 'text-gray-600'}`}>{item.desc || ""}</p>
               </div>
             </motion.div>
           ))}
         </div>
-      </div>
-    </section>
-  );
-};
-
-export const AsymmetricAbout = ({ data = {}, theme }: any) => {
-  const isGym = theme === "gym";
-  return (
-    <section className={`py-32 overflow-hidden ${isGym ? 'bg-[#111]' : 'bg-white'}`}>
-      <div className="max-w-[90rem] mx-auto px-6 md:px-12 grid grid-cols-1 md:grid-cols-12 gap-16 items-center">
-        <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }} className="md:col-span-6">
-          <h2 className={`text-4xl md:text-6xl leading-[1.05] mb-8 uppercase font-bold text-white`}>{data.title || ""}</h2>
-          <p className={`text-lg leading-relaxed font-light mb-10 text-gray-400`}>{data.desc || ""}</p>
-        </motion.div>
-        <motion.div initial={{ opacity: 0, x: 50 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }} className="md:col-span-5 md:col-start-8 relative h-[500px]">
-          {data.imageUrl && <img src={data.imageUrl} className="w-full h-full object-cover" alt="About" />}
-        </motion.div>
       </div>
     </section>
   );
