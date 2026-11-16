@@ -20,15 +20,16 @@ export const Navbar = () => (
 
 export const Hero = () => (
   <section className="relative w-full h-screen flex flex-col justify-center overflow-hidden bg-black">
-    {/* Reliable Video Background */}
+    {/* Reliable Video Background with Poster Fallback */}
     <video 
       autoPlay 
       loop 
       muted 
       playsInline 
+      poster="https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1920&q=80"
       className="absolute inset-0 w-full h-full object-cover z-0 opacity-50"
     >
-      <source src="https://cdn.coverr.co/videos/coverr-a-woman-getting-a-massage-1575/1080p.mp4" type="video/mp4" />
+      <source src="https://videos.pexels.com/video-files/3997799/3997799-hd_1920_1080_25fps.mp4" type="video/mp4" />
     </video>
     
     <div className="absolute inset-0 bg-gradient-to-t from-[#1a1a1a] via-black/20 to-black/40 z-10"></div>
