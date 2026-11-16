@@ -1,24 +1,47 @@
 "use client";
 import React from "react";
 
+export const Navbar = () => {
+  return (
+    <nav className="fixed top-0 w-full z-50 bg-black/40 backdrop-blur-md border-b border-white/10 transition-all duration-300">
+      <div className="max-w-[90rem] mx-auto px-6 h-20 flex items-center justify-between text-white">
+        <div className="font-serif text-2xl tracking-widest uppercase">Lumina.</div>
+        <div className="hidden md:flex gap-8 text-xs font-bold uppercase tracking-[0.2em]">
+          <a href="#" className="hover:text-gray-300 transition-colors">Treatments</a>
+          <a href="#" className="hover:text-gray-300 transition-colors">Philosophy</a>
+          <a href="#" className="hover:text-gray-300 transition-colors">Journal</a>
+        </div>
+        <button className="border border-white px-6 py-2.5 text-xs font-bold uppercase tracking-widest hover:bg-white hover:text-black transition-colors">
+          Book Now
+        </button>
+      </div>
+    </nav>
+  );
+};
+
 export const Hero = () => {
   return (
-    <section className="relative w-full h-screen flex flex-col justify-center overflow-hidden bg-[#1a1a1a]">
-      {/* Cinematic Background Image */}
-      <div 
-        className="absolute inset-0 z-0 opacity-50 bg-cover bg-center"
-        style={{ backgroundImage: `url('https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1920&q=80')` }}
-      />
+    <section className="relative w-full h-screen flex flex-col justify-center overflow-hidden bg-black">
+      {/* Cinematic Video Background with Image Fallback */}
+      <video 
+        autoPlay 
+        loop 
+        muted 
+        playsInline 
+        poster="https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1920&q=80"
+        className="absolute inset-0 w-full h-full object-cover z-0 opacity-50"
+      >
+        <source src="https://assets.mixkit.co/videos/preview/mixkit-spa-and-wellness-39953-large.mp4" type="video/mp4" />
+      </video>
       
-      {/* Dark Overlay for Contrast */}
-      <div className="absolute inset-0 bg-black/40 z-10"></div>
+      <div className="absolute inset-0 bg-black/30 z-10"></div>
       
-      {/* Content */}
-      <div className="relative z-20 w-full max-w-[90rem] mx-auto px-6 md:px-12 pt-32 pb-20">
-        <p className="text-white/80 tracking-[0.2em] uppercase text-sm font-medium mb-6">
+      {/* Animated Content */}
+      <div className="relative z-20 w-full max-w-[90rem] mx-auto px-6 md:px-12 pt-32 pb-20 animate-fade-up">
+        <p className="text-white/80 tracking-[0.3em] uppercase text-xs md:text-sm font-medium mb-6">
           Lumina Skin & Wellness
         </p>
-        <h1 className="leading-[1.05] text-white tracking-tight font-serif text-[8vw] font-normal max-w-4xl">
+        <h1 className="leading-[1.05] text-white tracking-tight font-serif text-[8vw] font-normal max-w-5xl">
           Radiance Refined. <br /> Wellness Elevated.
         </h1>
         <p className="text-white/80 text-lg md:text-2xl max-w-2xl mt-8 mb-12 font-light">
@@ -27,6 +50,26 @@ export const Hero = () => {
         <button className="px-10 py-5 uppercase tracking-widest text-xs font-bold bg-white text-black transition-transform hover:scale-105 duration-300">
           Book Your Consultation
         </button>
+      </div>
+    </section>
+  );
+};
+
+export const OverlappingStats = () => {
+  return (
+    <section className="relative z-30 -mt-24 max-w-[80rem] mx-auto px-6">
+      <div className="bg-white shadow-2xl rounded-xl p-8 md:p-12 grid grid-cols-2 md:grid-cols-4 gap-8">
+        {[
+          { num: "15+", label: "Years Experience" },
+          { num: "5k", label: "Happy Clients" },
+          { num: "20", label: "Expert Doctors" },
+          { num: "100%", label: "Satisfaction" }
+        ].map((stat, i) => (
+          <div key={i} className="border-l border-gray-200 pl-6">
+            <p className="text-4xl md:text-5xl font-serif text-gray-900 mb-2">{stat.num}</p>
+            <p className="text-xs uppercase tracking-widest text-gray-500">{stat.label}</p>
+          </div>
+        ))}
       </div>
     </section>
   );
