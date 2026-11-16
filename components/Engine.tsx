@@ -23,17 +23,26 @@ export const Navbar = ({ theme }: any) => {
 
 export const Hero = ({ data = {}, theme }: any) => {
   const isGym = theme === "gym";
+  
+  // Bright, cinematic fallback images in case video fails
+  const fallbackImage = isGym 
+    ? "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=1920&q=80"
+    : "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1920&q=80";
+
   return (
     <section className="relative w-full h-screen flex flex-col justify-center overflow-hidden bg-black">
-      {/* Uses the exact image the AI chose */}
-      <div className="absolute inset-0 z-0 opacity-40 bg-cover bg-center" style={{ backgroundImage: `url(${data.imageUrl || 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1920&q=80'})` }} />
-      <div className="absolute inset-0 bg-gradient-to-t from-[#1a1a1a] via-black/20 to-black/40 z-10"></div>
+      {/* Reliable Video + Bright Fallback */}
+      <video autoPlay loop muted playsInline poster={fallbackImage} className="absolute inset-0 w-full h-full object-cover z-0 opacity-60">
+        <source src={isGym ? "https://videos.pexels.com/video-files/3129595/3129595-hd_1920_1080_25fps.mp4" : "https://videos.pexels.com/video-files/3997799/3997799-hd_1920_1080_25fps.mp4"} type="video/mp4" />
+      </video>
+      
+      <div className="absolute inset-0 bg-gradient-to-t from-[#1a1a1a] via-black/30 to-black/50 z-10"></div>
       
       <div className="relative z-20 w-full max-w-[90rem] mx-auto px-6 md:px-12 pt-32 pb-20">
         <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 0.2 }} className={`leading-[1.05] text-white tracking-tight ${isGym ? 'font-sans uppercase font-bold text-[7vw]' : 'font-serif text-[7vw]'}`}>
           {data.headline || "Welcome"}
         </motion.h1>
-        <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1, delay: 0.6 }} className="text-white/80 text-lg md:text-2xl max-w-2xl mt-8 mb-12 font-light">
+        <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1, delay: 0.6 }} className="text-white/90 text-lg md:text-2xl max-w-2xl mt-8 mb-12 font-light">
           {data.subheadline || ""}
         </motion.p>
         <motion.button initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.8 }} className={`px-10 py-5 uppercase tracking-widest text-xs font-bold transition-transform hover:scale-105 duration-300 ${isGym ? 'bg-lime-400 text-black' : 'bg-white text-black'}`}>
@@ -110,14 +119,24 @@ export const BentoGrid = ({ data = {}, theme }: any) => {
 
 export const Gallery = ({ data = {}, theme }: any) => {
   const isGym = theme === "gym";
+  // Upgraded to an Asymmetric Masonry Grid for visual storytelling
   return (
     <section id="gallery" className={`py-32 ${isGym ? 'bg-[#0a0a0a]' : 'bg-[#f8f6f0]'}`}>
       <div className="max-w-[90rem] mx-auto px-6 md:px-12">
         <h2 className={`text-5xl md:text-7xl mb-16 text-center ${isGym ? 'text-white font-sans uppercase font-bold' : 'text-gray-900 font-serif'}`}>{data.title || "Gallery"}</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {Array.isArray(data.images) && data.images.map((img: string, i: number) => (
-            <motion.img key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.1 }} src={img} className="w-full h-64 md:h-80 object-cover rounded-xl" alt="Gallery" />
-          ))}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 auto-rows-[250px]">
+          {Array.isArray(data.images) && data.images.map((img: string, i: number) => {
+            // Make some images span 2 rows
+            const spanClass = i === 1 || i === 3 ? "row-span-2" : "row-span-1";
+            return (
+              <motion.img 
+                key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.1 }} 
+                src={img} 
+                className={`w-full h-full object-cover rounded-xl transition-transform duration-700 hover:scale-105 ${spanClass}`} 
+                alt="Gallery" 
+              />
+            );
+          })}
         </div>
       </div>
     </section>
@@ -170,30 +189,67 @@ export const FAQ = ({ data = {}, theme }: any) => {
 
 export const Testimonial = ({ data = {}, theme }: any) => {
   const isGym = theme === "gym";
+  // Upgraded to a Split-Screen Testimonial
   return (
-    <section className={`py-32 text-center ${isGym ? 'bg-[#111]' : 'bg-[#f8f6f0]'}`}>
-      <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 1 }} className="max-w-4xl mx-auto px-6">
-        <p className={`text-xs uppercase tracking-widest mb-12 ${isGym ? 'text-gray-400' : 'text-gray-500'}`}>Reviews</p>
-        <h2 className={`text-3xl md:text-5xl leading-tight mb-10 italic ${isGym ? 'font-sans text-white' : 'font-serif text-gray-900'}`}>"{data.quote || ""}"</h2>
-        <p className={`text-sm uppercase tracking-widest ${isGym ? 'text-gray-400' : 'text-gray-500'}`}>— {data.author || "Client"}</p>
-      </motion.div>
+    <section className={`${isGym ? 'bg-[#111] text-white' : 'bg-[#f8f6f0] text-gray-900'}`}>
+      <div className="grid grid-cols-1 md:grid-cols-2">
+        <div className="h-[400px] md:h-auto">
+          <img 
+            src={isGym ? "https://images.unsplash.com/photo-1574680096145-d05b474e2155?auto=format&fit=crop&w=1000&q=80" : "https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=1000&q=80"} 
+            className="w-full h-full object-cover" 
+            alt="Client" 
+          />
+        </div>
+        <div className="p-16 md:p-32 flex flex-col justify-center">
+          <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
+            <p className="text-xs uppercase tracking-widest mb-8 opacity-60">Client Stories</p>
+            <h2 className={`text-3xl md:text-5xl leading-tight mb-10 italic ${isGym ? 'font-sans' : 'font-serif'}`}>
+              "{data.quote || ""}"
+            </h2>
+            <p className="text-sm uppercase tracking-widest opacity-60">— {data.author || "Client"}</p>
+          </motion.div>
+        </div>
+      </div>
     </section>
   );
 };
 
 export const Footer = ({ data = {}, theme }: any) => {
   const isGym = theme === "gym";
+  // Upgraded to a Mega Footer with Newsletter & Giant Typography
   return (
-    <footer className={`pt-24 pb-12 border-t ${isGym ? 'bg-[#0a0a0a] border-white/10 text-white' : 'bg-[#111] border-white/10 text-white'}`}>
-      <div className="max-w-[90rem] mx-auto px-6 md:px-12 flex flex-col md:flex-row justify-between items-end">
-        <div>
-          <h3 className={`text-6xl md:text-8xl tracking-tighter mb-6 ${isGym ? 'font-sans uppercase font-bold' : 'font-serif'}`}>{data.brandName || "Brand"}</h3>
-          <p className="text-white/50 text-sm max-w-sm">{data.address || ""}<br/>{data.email || ""}<br/>{data.phone || ""}</p>
+    <footer className={`pt-32 pb-12 ${isGym ? 'bg-[#0a0a0a] text-white' : 'bg-[#111] text-white'}`}>
+      <div className="max-w-[90rem] mx-auto px-6 md:px-12 border-b border-white/10 pb-24 mb-12 flex flex-col md:flex-row justify-between items-start gap-16">
+        
+        <div className="flex-1">
+          <h2 className={`text-6xl md:text-8xl tracking-tighter mb-8 ${isGym ? 'font-sans uppercase font-bold' : 'font-serif'}`}>Let's Talk.</h2>
+          <div className="flex w-full max-w-md gap-4">
+            <input type="email" placeholder="Your email address" className="bg-transparent border-b border-white/30 pb-3 w-full focus:outline-none focus:border-white text-white placeholder-gray-500" />
+            <button className={`px-6 py-3 text-xs font-bold uppercase tracking-widest transition-colors ${isGym ? 'bg-lime-400 text-black hover:bg-lime-300' : 'bg-white text-black hover:bg-gray-200'}`}>Subscribe</button>
+          </div>
         </div>
-        <div className="mt-12 md:mt-0 text-left md:text-right">
-          <a href="#" className="block text-lg font-medium hover:text-gray-400 mb-2 transition-colors">Instagram</a>
-          <a href="#" className="block text-lg font-medium hover:text-gray-400 mb-2 transition-colors">Twitter</a>
+
+        <div className="flex gap-16">
+          <div>
+            <h4 className="text-xs uppercase tracking-widest text-gray-500 mb-6">Contact</h4>
+            <p className="text-gray-300 text-sm leading-loose">
+              {data.address || ""}<br/>
+              {data.email || ""}<br/>
+              {data.phone || ""}
+            </p>
+          </div>
+          <div>
+            <h4 className="text-xs uppercase tracking-widest text-gray-500 mb-6">Social</h4>
+            <a href="#" className="block text-gray-300 text-sm mb-3 hover:text-white transition-colors">Instagram</a>
+            <a href="#" className="block text-gray-300 text-sm mb-3 hover:text-white transition-colors">Twitter</a>
+            <a href="#" className="block text-gray-300 text-sm hover:text-white transition-colors">LinkedIn</a>
+          </div>
         </div>
+      </div>
+      
+      <div className="max-w-[90rem] mx-auto px-6 md:px-12 flex justify-between items-center text-xs text-gray-600">
+        <p>© {new Date().getFullYear()} {data.brandName || "Brand"}. All rights reserved.</p>
+        <p>Powered by Forma</p>
       </div>
     </footer>
   );
