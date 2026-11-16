@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
 
-export const maxDuration = 60; // Ask Vercel for 60s, but we will finish in 5s
+export const maxDuration = 60;
 
 const SYSTEM_PROMPT = `
 You are an elite web design AI. You MUST return ONLY a valid JSON object. Do not use markdown.
@@ -37,7 +37,7 @@ export async function POST(req: Request) {
     const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
     const msg = await client.messages.create({
-      model: "claude-3-haiku-20240307", // The fastest model
+      model: "claude-haiku-4-5-20251001", // Current active Haiku model
       temperature: 0.2,
       max_tokens: 4000,
       system: SYSTEM_PROMPT,
