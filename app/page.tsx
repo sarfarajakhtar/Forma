@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { Navbar, Hero, OverlappingStats, AsymmetricAbout, BentoGrid, Gallery, EditorialList, FAQ, Testimonial, Footer } from "../components/Engine";
+import { Navbar, Hero, BentoGrid, Timeline, AsymmetricAbout, FullWidthCTA, Testimonial, Footer } from "../components/Engine";
 
 export default function Home() {
   const [description, setDescription] = useState("");
@@ -32,16 +32,14 @@ export default function Home() {
   const renderSection = (section: any, index: number) => {
     if (!section || !section.props) return null;
     const type = (section.type || "").toLowerCase();
-    const props = { key: index, data: section.props, theme: blueprint?.theme || 'spa' };
+    const props = { key: index, data: section.props, theme: blueprint?.theme || 'gym' };
 
     switch (type) {
       case "hero": return <Hero {...props} />;
-      case "overlappingstats": return <OverlappingStats {...props} />;
-      case "asymmetricabout": return <AsymmetricAbout {...props} />;
       case "bentogrid": return <BentoGrid {...props} />;
-      case "gallery": return <Gallery {...props} />;
-      case "editoriallist": return <EditorialList {...props} />;
-      case "faq": return <FAQ {...props} />;
+      case "timeline": return <Timeline {...props} />;
+      case "asymmetricabout": return <AsymmetricAbout {...props} />;
+      case "fullwidthcta": return <FullWidthCTA {...props} />;
       case "testimonial": return <Testimonial {...props} />;
       case "footer": return <Footer {...props} />;
       default: return null;
@@ -51,7 +49,7 @@ export default function Home() {
   if (blueprint) {
     const sections = Array.isArray(blueprint.sections) ? blueprint.sections : [];
     return (
-      <div className={`relative min-h-screen ${blueprint.theme === 'spa' ? 'bg-[#f8f6f0]' : 'bg-[#111]'}`}>
+      <div className={`relative min-h-screen ${blueprint.theme === 'spa' ? 'bg-[#f8f6f0]' : 'bg-[#0a0a0a]'}`}>
         <style dangerouslySetInnerHTML={{__html: `
           @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap');
           .font-gym { font-family: 'Oswald', sans-serif; }
@@ -63,11 +61,13 @@ export default function Home() {
         <Navbar theme={blueprint.theme} />
         <main>
           {sections.map((section: any, i: number) => renderSection(section, i))}
+          {/* Ensure CTA is always added before footer if AI forgets */}
+          {!sections.find(s => s.type.toLowerCase() === 'fullwidthcta') && <FullWidthCTA data={{}} theme={blueprint.theme} />}
         </main>
         
         <button 
           onClick={() => setBlueprint(null)}
-          className="fixed bottom-6 right-6 bg-black text-white px-6 py-3 rounded-full text-sm font-bold shadow-2xl hover:bg-gray-800 transition-colors z-50"
+          className="fixed bottom-6 right-6 bg-white text-black px-6 py-3 rounded-full text-sm font-bold shadow-2xl hover:bg-gray-200 transition-colors z-50"
         >
           ← Generate Another
         </button>
@@ -76,24 +76,24 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-neutral-50 flex items-center justify-center p-6 font-sans">
+    <div className="min-h-screen bg-neutral-900 flex items-center justify-center p-6 font-sans">
       <div className="max-w-2xl w-full">
-        <h1 className="text-4xl font-semibold mb-2 text-neutral-900">Forma Engine</h1>
-        <p className="text-neutral-600 mb-8 text-lg">Generate an elite website from a prompt.</p>
+        <h1 className="text-4xl font-semibold mb-2 text-white">Forma Engine</h1>
+        <p className="text-neutral-400 mb-8 text-lg">Generate an elite, art-directed website.</p>
         <textarea
-          className="block w-full h-48 p-6 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900 bg-white mb-6 text-lg shadow-sm"
-          placeholder="Describe your business... (e.g. A luxury medical spa in Austin called Lumina. Offers Botox, fillers, and laser. Vibe is calm, elegant, 5-star hotel.)"
+          className="block w-full h-48 p-6 border border-neutral-700 rounded-none focus:outline-none focus:border-lime-400 bg-black text-white mb-6 text-lg shadow-sm"
+          placeholder="Describe your business..."
           value={description}
           onChange={(e) => setDescription(e.target.value)}
         />
         <button
           onClick={generate}
           disabled={loading || description.length < 20}
-          className="bg-neutral-900 text-white px-8 py-4 rounded-xl font-medium hover:bg-neutral-700 transition-colors disabled:opacity-50 w-full text-lg shadow-lg"
+          className="bg-lime-400 text-black px-8 py-4 font-bold uppercase tracking-widest transition-colors disabled:opacity-50 w-full text-sm shadow-lg hover:bg-white"
         >
           {loading ? "Assembling Website..." : "Generate Website"}
         </button>
-        {error && <div className="mt-6 p-4 bg-red-50 text-red-700 border border-red-200 rounded-xl">{error}</div>}
+        {error && <div className="mt-6 p-4 bg-red-900/50 text-red-200 border border-red-700 rounded-none">{error}</div>}
       </div>
     </div>
   );
