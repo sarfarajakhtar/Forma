@@ -25,9 +25,8 @@ export const Hero = ({ data = {}, theme }: any) => {
   const isGym = theme === "gym";
   return (
     <section className="relative w-full h-screen flex flex-col justify-center overflow-hidden bg-black">
-      <video autoPlay loop muted playsInline poster="https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1920&q=80" className="absolute inset-0 w-full h-full object-cover z-0 opacity-50">
-        <source src="https://videos.pexels.com/video-files/3997799/3997799-hd_1920_1080_25fps.mp4" type="video/mp4" />
-      </video>
+      {/* Uses the exact image the AI chose */}
+      <div className="absolute inset-0 z-0 opacity-40 bg-cover bg-center" style={{ backgroundImage: `url(${data.imageUrl || 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1920&q=80'})` }} />
       <div className="absolute inset-0 bg-gradient-to-t from-[#1a1a1a] via-black/20 to-black/40 z-10"></div>
       
       <div className="relative z-20 w-full max-w-[90rem] mx-auto px-6 md:px-12 pt-32 pb-20">
@@ -60,6 +59,29 @@ export const OverlappingStats = ({ data = {}, theme }: any) => {
   );
 };
 
+export const AsymmetricAbout = ({ data = {}, theme }: any) => {
+  const isGym = theme === "gym";
+  return (
+    <section className={`py-32 overflow-hidden ${isGym ? 'bg-[#0a0a0a]' : 'bg-white'}`}>
+      <div className="max-w-[90rem] mx-auto px-6 md:px-12 grid grid-cols-1 md:grid-cols-12 gap-16 items-center">
+        <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }} className="md:col-span-5">
+          <h2 className={`text-5xl md:text-7xl leading-[1.05] mb-8 ${isGym ? 'font-sans uppercase font-bold text-white' : 'font-serif text-gray-900'}`}>{data.title || ""}</h2>
+          <p className={`text-lg leading-relaxed font-light mb-10 ${isGym ? 'text-gray-400' : 'text-gray-600'}`}>{data.desc || ""}</p>
+        </motion.div>
+        <motion.div initial={{ opacity: 0, x: 50 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }} className="md:col-span-6 md:col-start-7 relative h-[600px]">
+          {data.imageUrl && <img src={data.imageUrl} className="w-full h-full object-cover rounded-2xl shadow-2xl" alt="About" />}
+          {data.badge && (
+            <div className={`absolute -bottom-10 -left-10 p-10 rounded-2xl shadow-xl hidden md:block ${isGym ? 'bg-lime-400' : 'bg-[#1a1a1a]'}`}>
+              <p className={`text-3xl mb-2 uppercase ${isGym ? 'font-sans font-bold text-black' : 'font-serif text-white'}`}>{data.badge.title}</p>
+              <p className={`text-xs uppercase tracking-widest ${isGym ? 'text-black/70' : 'text-gray-400'}`}>{data.badge.sub}</p>
+            </div>
+          )}
+        </motion.div>
+      </div>
+    </section>
+  );
+};
+
 export const BentoGrid = ({ data = {}, theme }: any) => {
   const isGym = theme === "gym";
   return (
@@ -75,7 +97,7 @@ export const BentoGrid = ({ data = {}, theme }: any) => {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
                 <div className="absolute bottom-0 p-10">
                   <h3 className={`text-3xl mb-2 text-white ${isGym ? 'font-sans uppercase font-bold' : 'font-serif'}`}>{item.title || ""}</h3>
-                  <p className="text-white/80 text-sm">{item.description || ""}</p>
+                  <p className="text-white/80 text-sm">{item.desc || ""}</p>
                 </div>
               </motion.div>
             );
