@@ -1,5 +1,5 @@
 "use client";
-import { Navbar, Hero, OverlappingStats, BentoGrid, EditorialList, FullWidthCTA, Testimonial, Footer } from "../components/Engine";
+import { Navbar, Hero, OverlappingStats, BentoGrid, Gallery, EditorialList, FAQ, FullWidthCTA, Testimonial, Footer } from "../components/Engine";
 
 export default function Home() {
   return (
@@ -15,7 +15,9 @@ export default function Home() {
         <Hero />
         <OverlappingStats />
         <BentoGrid />
+        <Gallery />
         <EditorialList />
+        <FAQ />
         <FullWidthCTA />
         <Testimonial />
         <Footer />
