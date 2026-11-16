@@ -139,7 +139,7 @@ export const Gallery = () => (
           "https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=600&q=80",
           "https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=600&q=80",
           "https://images.unsplash.com/photo-1552693673-1bf958298935?auto=format&fit=crop&w=600&q=80",
-          "https://images.unsplash.com/photo-1598440947619-2c3f80f2b136?auto=format&fit=crop&w=600&q=80"
+          "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=600&q=80"
         ].map((img, i) => (
           <motion.img 
             key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.1 }}
