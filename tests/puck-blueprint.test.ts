@@ -9,25 +9,25 @@ test("valid fixture passes full-page validation", () => {
 });
 
 test("invalid email is rejected", () => {
-  const invalid = structuredClone(sampleBlueprint);
+  const invalid: any = structuredClone(sampleBlueprint);
   invalid.content[2].props.email = "not-an-email";
   assert.equal(PageBlueprintSchema.safeParse(invalid).success, false);
 });
 
 test("unknown component is rejected", () => {
-  const invalid = structuredClone(sampleBlueprint);
+  const invalid: any = structuredClone(sampleBlueprint);
   invalid.content[0].type = "MadeUpHero";
   assert.equal(PageBlueprintSchema.safeParse(invalid).success, false);
 });
 
 test("duplicate component ID is rejected", () => {
-  const invalid = structuredClone(sampleBlueprint);
+  const invalid: any = structuredClone(sampleBlueprint);
   invalid.content[2].props.id = "hero-demo-1";
   assert.equal(PageBlueprintSchema.safeParse(invalid).success, false);
 });
 
 test("unsafe links are rejected", () => {
-  const invalid = structuredClone(sampleBlueprint);
+  const invalid: any = structuredClone(sampleBlueprint);
   invalid.content[0].props.ctaHref = "javascript:alert(1)";
   assert.equal(PageBlueprintSchema.safeParse(invalid).success, false);
 });
