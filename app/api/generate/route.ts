@@ -21,9 +21,11 @@ You MUST generate exactly 7 sections in this EXACT order:
   ]
 }
 
-Use these exact image IDs for gym imageUrl fields: 1534438327276-14e5300c3a48, 1517836357463-d25dfeac3438, 1581009146145-b5ef050c2e1e, 1574680096145-d05b474e2155
-Format: https://images.unsplash.com/photo-{ID}?auto=format&fit=crop&w=1200&q=80
-Keep text descriptions under 15 words.
+CRITICAL RULES:
+- For "FullWidthCTA", use premium conversion copy. DO NOT use generic phrases like "Claim Your Spot". Use phrases like "Secure Your Membership", "Apply For Access", or "Join The Roster".
+- Use these exact image IDs for gym imageUrl fields: 1581009146145-b5ef050c2e1e, 1517836357463-d25dfeac3438, 1574680096145-d05b474e2155, 1541534741688-6078c6bfb5c5
+- Format: https://images.unsplash.com/photo-{ID}?auto=format&fit=crop&w=1200&q=80
+- Keep text descriptions under 15 words.
 `;
 
 export async function POST(req: Request) {
