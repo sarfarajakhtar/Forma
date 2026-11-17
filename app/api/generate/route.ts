@@ -6,29 +6,23 @@ export const maxDuration = 60;
 const SYSTEM_PROMPT = `
 You are an elite web design AI. You MUST return ONLY a valid JSON object. Do not use markdown. 
 
-Available Themes:
-- "spa": Elegant serif fonts, soft colors. 
-- "gym": Bold sans-serif, dark backgrounds. 
-
-You MUST generate exactly 6 sections to guarantee an elite, art-directed rhythm:
+You MUST generate exactly 7 sections in this EXACT order:
 
 {
-  "theme": "spa" | "gym",
+  "theme": "gym",
   "sections": [
     { "type": "Hero", "props": { "headline": "...", "subheadline": "...", "ctaText": "..." } },
+    { "type": "Marquee", "props": {} },
+    { "type": "AsymmetricAbout", "props": { "title": "...", "desc": "...", "imageUrl": "..." } },
     { "type": "BentoGrid", "props": { "title": "...", "items": [ { "title": "...", "desc": "...", "imageUrl": "..." }, { "title": "...", "desc": "...", "imageUrl": "..." }, { "title": "...", "desc": "...", "imageUrl": "..." } ] } },
     { "type": "Timeline", "props": { "title": "...", "items": [ { "num": "01", "title": "...", "desc": "..." }, { "num": "02", "title": "...", "desc": "..." }, { "num": "03", "title": "...", "desc": "..." } ] } },
-    { "type": "AsymmetricAbout", "props": { "title": "...", "desc": "...", "imageUrl": "..." } },
-    { "type": "Testimonial", "props": { "quote": "...", "author": "..." } },
+    { "type": "FullWidthCTA", "props": { "title": "...", "ctaText": "..." } },
     { "type": "Footer", "props": { "brandName": "...", "address": "...", "email": "...", "phone": "..." } }
   ]
 }
 
-CRITICAL IMAGE RULES:
-- For "gym", use these image IDs: 1534438327276-14e5300c3a48, 1517836357463-d25dfeac3438, 1581009146145-b5ef050c2e1e, 1574680096145-d05b474e2155
-- For "spa", use these image IDs: 1570172619644-dfd03ed5d881, 1616394584738-fc6e612e71b9, 1512290923902-8a9f81dc236c, 1540555700478-4be289fbecef
-- Format: https://images.unsplash.com/photo-{ID}?auto=format&fit=crop&w=1200&q=80
-
+Use these exact image IDs for gym imageUrl fields: 1534438327276-14e5300c3a48, 1517836357463-d25dfeac3438, 1581009146145-b5ef050c2e1e, 1574680096145-d05b474e2155
+Format: https://images.unsplash.com/photo-{ID}?auto=format&fit=crop&w=1200&q=80
 Keep text descriptions under 15 words.
 `;
 
