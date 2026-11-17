@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "npm run test:puck && next build",
     "start": "next start",
     "test:puck": "tsx --test tests/puck-blueprint.test.ts"
   },
