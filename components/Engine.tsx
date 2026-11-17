@@ -54,9 +54,29 @@ export const Hero = ({ data = {}, theme }: any) => {
   );
 };
 
+export const Marquee = () => {
+  // NEW: Breaks the dark monotony with high-energy movement and bold typography
+  return (
+    <div className="bg-lime-400 py-6 overflow-hidden border-y border-lime-500 flex whitespace-nowrap">
+      <motion.div 
+        animate={{ x: [0, -1000] }} 
+        transition={{ repeat: Infinity, duration: 20, ease: "linear" }}
+        className="flex gap-12 items-center text-black font-sans font-bold uppercase tracking-tighter text-4xl md:text-6xl"
+      >
+        <span>Powerlifting</span> <span className="text-black/30">✦</span>
+        <span>Recovery</span> <span className="text-black/30">✦</span>
+        <span>Strength</span> <span className="text-black/30">✦</span>
+        <span>Community</span> <span className="text-black/30">✦</span>
+        <span>Powerlifting</span> <span className="text-black/30">✦</span>
+        <span>Recovery</span> <span className="text-black/30">✦</span>
+      </motion.div>
+    </div>
+  );
+};
+
 export const AsymmetricAbout = ({ data = {}, theme }: any) => {
   return (
-    <section className="py-32 overflow-hidden bg-[#050505]">
+    <section className="py-24 overflow-hidden bg-[#050505]">
       <div className="max-w-[90rem] mx-auto px-6 md:px-12 grid grid-cols-1 md:grid-cols-12 gap-16 items-center">
         <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }} className="md:col-span-6">
           <h2 className="text-4xl md:text-6xl leading-[1.05] mb-8 uppercase font-sans font-bold text-white">{data.title || "Built for the serious."}</h2>
@@ -72,19 +92,19 @@ export const AsymmetricAbout = ({ data = {}, theme }: any) => {
 
 export const BentoGrid = ({ data = {}, theme }: any) => {
   return (
-    <section id="services" className="py-32 bg-[#111]">
+    <section id="services" className="py-24 bg-[#111]">
       <div className="max-w-[90rem] mx-auto px-6 md:px-12">
         <h2 className="text-4xl md:text-6xl mb-16 text-white uppercase font-sans font-bold tracking-tight">{data.title || "What We Offer"}</h2>
         
         <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
           {Array.isArray(data.items) && data.items.map((item: any, i: number) => {
-            const colSpan = i === 0 ? "md:col-span-8 md:row-span-2 h-[600px]" : "md:col-span-4 h-[290px]";
+            const colSpan = i === 0 ? "md:col-span-8 md:row-span-2 h-[500px]" : "md:col-span-4 h-[240px]"; // Tightened heights
             return (
               <motion.div key={i} initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: 0.8, delay: i * 0.2 }} className={`relative group overflow-hidden border border-white/5 ${colSpan}`}>
                 {item.imageUrl && <img src={item.imageUrl} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105 grayscale group-hover:grayscale-0" alt={item.title} />}
                 <div className="absolute inset-0 bg-gradient-to-t from-[#111] via-black/40 to-transparent"></div>
-                <div className="absolute bottom-0 p-8 md:p-10">
-                  <h3 className="text-2xl md:text-3xl mb-2 text-white uppercase font-sans font-bold">{item.title || ""}</h3>
+                <div className="absolute bottom-0 p-8">
+                  <h3 className="text-2xl mb-2 text-white uppercase font-sans font-bold">{item.title || ""}</h3>
                   <p className="text-gray-400 text-sm max-w-md opacity-0 group-hover:opacity-100 transition-opacity duration-500">{item.desc || ""}</p>
                 </div>
               </motion.div>
@@ -98,23 +118,22 @@ export const BentoGrid = ({ data = {}, theme }: any) => {
 
 export const Timeline = ({ data = {}, theme }: any) => {
   return (
-    <section id="process" className="py-32 bg-[#050505]">
+    <section id="process" className="py-24 bg-[#050505]">
       <div className="max-w-[90rem] mx-auto px-6 md:px-12">
-        <h2 className="text-4xl md:text-7xl mb-24 uppercase font-sans font-bold tracking-tighter text-white">{data.title || "The Method"}</h2>
+        <h2 className="text-4xl md:text-7xl mb-16 uppercase font-sans font-bold tracking-tighter text-white">{data.title || "The Method"}</h2>
         
-        <div className="flex flex-col border-l border-lime-400/30 pl-8 md:pl-16 gap-20">
+        <div className="flex flex-col border-l border-lime-400/30 pl-8 md:pl-16 gap-12">
           {Array.isArray(data.items) && data.items.map((item: any, i: number) => (
             <motion.div key={i} initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: i * 0.2 }} className="relative">
-              {/* Huge numbers */}
-              <div className="absolute -left-12 md:-left-24 -top-12 text-[7rem] md:text-[11rem] font-bold text-white/[0.03] leading-none select-none z-0 font-sans">
+              <div className="absolute -left-12 md:-left-24 -top-10 text-[6rem] md:text-[10rem] font-bold text-white/[0.03] leading-none select-none z-0 font-sans">
                 {item.num || "01"}
               </div>
               <div className="relative z-10">
-                <h3 className="text-3xl md:text-5xl mb-4 uppercase font-sans font-bold text-white flex items-center gap-4">
+                <h3 className="text-2xl md:text-4xl mb-3 uppercase font-sans font-bold text-white flex items-center gap-4">
                   <span className="w-2 h-2 bg-lime-400 rounded-full inline-block"></span>
                   {item.title || ""}
                 </h3>
-                <p className="text-gray-400 text-lg max-w-2xl font-light">{item.desc || ""}</p>
+                <p className="text-gray-400 text-base max-w-2xl font-light">{item.desc || ""}</p>
               </div>
             </motion.div>
           ))}
@@ -126,12 +145,13 @@ export const Timeline = ({ data = {}, theme }: any) => {
 
 export const FullWidthCTA = ({ data = {}, theme }: any) => {
   return (
-    <section className="relative py-48 bg-fixed bg-center bg-cover" style={{ backgroundImage: `url('https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=1920&q=80')` }}>
-      <div className="absolute inset-0 bg-[#050505]/90"></div>
+    // Tightened padding from py-48 to py-24 to remove excessive empty space
+    <section className="relative py-24 bg-fixed bg-center bg-cover border-y border-white/5" style={{ backgroundImage: `url('https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=1920&q=80')` }}>
+      <div className="absolute inset-0 bg-[#050505]/95"></div>
       <motion.div initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: 0.8 }} className="relative z-10 max-w-4xl mx-auto text-center px-6">
-        <h2 className="text-5xl md:text-8xl leading-none font-sans font-bold uppercase text-white mb-8 tracking-tighter">{data.title || "Claim Your Spot"}</h2>
-        <p className="text-gray-400 text-lg md:text-xl mb-12 max-w-2xl mx-auto font-light">Membership is limited. We curate our community to protect the intensity and focus of the floor.</p>
-        <button className="bg-lime-400 text-black px-14 py-6 uppercase tracking-widest text-xs font-bold transition-transform duration-300 hover:scale-105">{data.ctaText || "Apply For Membership"}</button>
+        <h2 className="text-4xl md:text-7xl leading-none font-sans font-bold uppercase text-white mb-6 tracking-tighter">{data.title || "Claim Your Spot"}</h2>
+        <p className="text-gray-400 text-base md:text-lg mb-8 max-w-xl mx-auto font-light">Membership is limited. We curate our community to protect the intensity and focus of the floor.</p>
+        <button className="bg-lime-400 text-black px-12 py-5 uppercase tracking-widest text-[10px] font-bold transition-transform duration-300 hover:scale-105">{data.ctaText || "Apply For Membership"}</button>
       </motion.div>
     </section>
   );
@@ -140,17 +160,15 @@ export const FullWidthCTA = ({ data = {}, theme }: any) => {
 export const Testimonial = ({ data = {}, theme }: any) => {
   return (
     <section className="bg-[#050505]">
-      <div className="grid grid-cols-1 md:grid-cols-2 border-y border-white/5">
+      <div className="grid grid-cols-1 md:grid-cols-2 border-b border-white/5">
         <div className="h-[400px] md:h-auto relative">
           <img src="https://images.unsplash.com/photo-1574680096145-d05b474e2155?auto=format&fit=crop&w=1000&q=80" className="w-full h-full object-cover grayscale opacity-80" alt="Client" />
           <div className="absolute inset-0 bg-gradient-to-r from-transparent to-[#050505]"></div>
         </div>
-        <div className="p-16 md:p-32 flex flex-col justify-center">
+        <div className="p-16 md:p-24 flex flex-col justify-center">
           <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
-            <p className="text-[10px] uppercase tracking-[0.3em] mb-10 text-lime-400 font-bold">Member Reviews</p>
-            <h2 className="text-2xl md:text-4xl leading-snug mb-12 text-white font-light">
-              "{data.quote || ""}"
-            </h2>
+            <p className="text-[10px] uppercase tracking-[0.3em] mb-8 text-lime-400 font-bold">Member Reviews</p>
+            <h2 className="text-2xl md:text-3xl leading-snug mb-8 text-white font-light">"{data.quote || ""}"</h2>
             <p className="text-xs uppercase tracking-widest text-gray-500">— {data.author || "Client"}</p>
           </motion.div>
         </div>
