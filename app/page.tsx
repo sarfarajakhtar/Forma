@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { Navbar, Hero, BentoGrid, Timeline, AsymmetricAbout, FullWidthCTA, Testimonial, Footer } from "../components/Engine";
+import { Navbar, Hero, Marquee, AsymmetricAbout, BentoGrid, Timeline, FullWidthCTA, Footer } from "../components/Engine";
 
 export default function Home() {
   const [description, setDescription] = useState("");
@@ -29,40 +29,37 @@ export default function Home() {
     }
   }
 
-  const renderSection = (section: any, index: number) => {
-    if (!section || !section.props) return null;
-    const type = (section.type || "").toLowerCase();
-    const props = { key: index, data: section.props, theme: blueprint?.theme || 'gym' };
-
-    switch (type) {
-      case "hero": return <Hero {...props} />;
-      case "bentogrid": return <BentoGrid {...props} />;
-      case "timeline": return <Timeline {...props} />;
-      case "asymmetricabout": return <AsymmetricAbout {...props} />;
-      case "fullwidthcta": return <FullWidthCTA {...props} />;
-      case "testimonial": return <Testimonial {...props} />;
-      case "footer": return <Footer {...props} />;
-      default: return null;
-    }
-  };
-
   if (blueprint) {
-    const sections = Array.isArray(blueprint.sections) ? blueprint.sections : [];
+    // Force the exact visual rhythm, ignoring the AI's order if it hallucinated.
+    const fixedOrder = ["hero", "marquee", "asymmetricabout", "bentogrid", "timeline", "fullwidthcta", "footer"];
+    
+    // Map through our fixed order and find the matching section from the AI's JSON
+    const sortedSections = fixedOrder.map(type => {
+      return blueprint.sections.find((s: any) => s.type.toLowerCase() === type) || null;
+    }).filter(Boolean);
+
     return (
-      <div className={`relative min-h-screen ${blueprint.theme === 'spa' ? 'bg-[#f8f6f0]' : 'bg-[#0a0a0a]'}`}>
+      <div className="relative min-h-screen bg-[#050505]">
         <style dangerouslySetInnerHTML={{__html: `
-          @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap');
-          .font-gym { font-family: 'Oswald', sans-serif; }
-          .font-spa { font-family: 'Cormorant Garamond', serif; }
-          .font-sans { font-family: 'Inter', sans-serif; }
-          .font-serif { font-family: 'Cormorant Garamond', serif; }
+          @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&family=Inter:wght@300;400;500;600&display=swap');
+          .font-sans { font-family: 'Oswald', 'Inter', sans-serif; }
         `}} />
         
         <Navbar theme={blueprint.theme} />
         <main>
-          {sections.map((section: any, i: number) => renderSection(section, i))}
-          {/* Ensure CTA is always added before footer if AI forgets */}
-          {!sections.find(s => s.type.toLowerCase() === 'fullwidthcta') && <FullWidthCTA data={{}} theme={blueprint.theme} />}
+          {sortedSections.map((section: any, i: number) => {
+            const props = { key: i, data: section.props, theme: blueprint.theme };
+            switch (section.type.toLowerCase()) {
+              case "hero": return <Hero {...props} />;
+              case "marquee": return <Marquee {...props} />;
+              case "asymmetricabout": return <AsymmetricAbout {...props} />;
+              case "bentogrid": return <BentoGrid {...props} />;
+              case "timeline": return <Timeline {...props} />;
+              case "fullwidthcta": return <FullWidthCTA {...props} />;
+              case "footer": return <Footer {...props} />;
+              default: return null;
+            }
+          })}
         </main>
         
         <button 
