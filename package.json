@@ -4,10 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "npm run test:puck && npm run test:forma && next build",
+    "build": "npm run test:puck && npm run test:forma && npm run test:budget && next build",
     "start": "next start",
     "test:puck": "tsx --test tests/puck-blueprint.test.ts",
-    "test:forma": "tsx --test tests/forma-generation-gate.test.ts"
+    "test:forma": "tsx --test tests/forma-generation-gate.test.ts",
+    "test:budget": "tsx --test tests/forma-experiment-budget.test.ts"
   },
   "dependencies": {
     "next": "14.2.5",
