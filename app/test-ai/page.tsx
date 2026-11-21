@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { Render } from "@puckeditor/core";
-import { puckConfig } from "@/lib/puck/registry";
+import { puckConfig } from "../../lib/puck/registry";
 
 export default function TestAIPage() {
   const [description, setDescription] = useState("");
