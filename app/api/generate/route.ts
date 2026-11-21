@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
-import { parsePuckBlueprint } from "@/lib/puck/blueprint";
+import { parsePuckBlueprint } from "../../../lib/puck/blueprint";
 
 export const maxDuration = 60;
 
@@ -90,7 +90,6 @@ export async function POST(req: Request) {
 
   } catch (error: any) {
     console.error("API Error:", error);
-    // Catch Zod errors specifically to give the user better feedback
     if (error.name === "ZodError") {
       return NextResponse.json({ error: "The AI generated invalid data structure. Please try again." }, { status: 500 });
     }
