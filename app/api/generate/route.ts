@@ -51,10 +51,10 @@ You must generate a JSON blueprint exactly matching this structure:
 
 RULES:
 1. Do NOT invent addresses, phone numbers, or statistics. If not provided, leave them empty or omit them.
-2. Use these exact Unsplash IDs based on the industry:
-   - Tech/Law: 1497366216548-37526070297c, 1497366811353-6870744d04b2, 1451187580459-43490279c0fa
-   - Gym/Spa: 1534438327276-14e5300c3a48, 1540555700478-4be289fbecef, 1570172619644-dfd03ed5d881
-   - Bakery/Food: 1509440159596-0249088772ff, 1555507036-ab1f4038808a, 1517433670267-08bbd4be890f
+2. Use these EXACT Unsplash IDs based on the industry:
+   - IF GYM: 1534438327276-14e5300c3a48, 1517836357463-d25dfeac3438, 1581009146145-b5ef050c2e1e
+   - IF SPA/BAKERY: 1540555700478-4be289fbecef, 1509440159596-0249088772ff, 1517433670267-08bbd4be890f
+   - IF TECH/LAW: 1497366216548-37526070297c, 1497366811353-6870744d04b2, 1451187580459-43490279c0fa
 3. Keep descriptions under 15 words.
 `;
 
@@ -76,7 +76,6 @@ export async function POST(req: Request) {
     });
 
     let text = msg.content[0].type === 'text' ? msg.content[0].text : "";
-    
     const jsonMatch = text.match(/\{[\s\S]*\}/);
     if (!jsonMatch) throw new Error("AI did not return valid JSON.");
 
