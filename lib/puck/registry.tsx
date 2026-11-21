@@ -1,10 +1,6 @@
 import type { Config } from "@puckeditor/core";
 import React from "react";
 
-/**
- * Step 1 demonstration components, not the final design library.
- * No AI, network calls, database, or publishing actions.
- */
 export const puckConfig: Config = {
   components: {
     HeroImage: {
@@ -50,9 +46,10 @@ export const puckConfig: Config = {
         <section id="services" className="bg-stone-50 py-20 text-stone-950 sm:py-28">
           <div className="mx-auto max-w-7xl px-6 md:px-12">
             <h2 className="mb-12 max-w-4xl text-4xl font-semibold tracking-tight sm:text-5xl">{title}</h2>
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-12">
+            {/* FIXED GRID: Using grid-cols-3 for perfect alignment */}
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
               {items.map((item: { title: string; description: string; imageUrl: string; imageAlt: string }, index: number) => (
-                <article key={index} className={`group relative min-h-[320px] overflow-hidden rounded-xl bg-stone-800 md:min-h-[400px] ${index === 0 ? "md:col-span-8" : "md:col-span-4"}`}>
+                <article key={index} className="group relative min-h-[320px] overflow-hidden rounded-xl bg-stone-800 md:min-h-[400px]">
                   <img src={item.imageUrl} alt={item.imageAlt} className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
                   <div className="absolute inset-x-0 bottom-0 p-6 text-white sm:p-8">
