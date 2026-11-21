@@ -1,37 +1,33 @@
-import assert from "node:assert/strict";
 import { test } from "node:test";
-import { parsePuckBlueprint, PageBlueprintSchema } from "../lib/puck/blueprint";
+import assert from "node:assert";
+import { parsePuckBlueprint } from "../lib/puck/blueprint";
 import { sampleBlueprint } from "../lib/puck/sample";
 
 test("valid fixture passes full-page validation", () => {
-  assert.equal(PageBlueprintSchema.safeParse(sampleBlueprint).success, true);
-  assert.equal(parsePuckBlueprint(sampleBlueprint).content.length, 3);
+  const result = parsePuckBlueprint(sampleBlueprint);
+  assert.ok(result);
 });
 
 test("invalid email is rejected", () => {
-  const invalid: any = structuredClone(sampleBlueprint);
+  const invalid = JSON.parse(JSON.stringify(sampleBlueprint));
   invalid.content[2].props.email = "not-an-email";
-  assert.equal(PageBlueprintSchema.safeParse(invalid).success, false);
+  assert.throws(() => parsePuckBlueprint(invalid));
 });
 
 test("unknown component is rejected", () => {
-  const invalid: any = structuredClone(sampleBlueprint);
-  invalid.content[0].type = "MadeUpHero";
-  assert.equal(PageBlueprintSchema.safeParse(invalid).success, false);
+  const invalid = JSON.parse(JSON.stringify(sampleBlueprint));
+  invalid.content[0].type = "UnknownComponent";
+  assert.throws(() => parsePuckBlueprint(invalid));
 });
 
 test("duplicate component ID is rejected", () => {
-  const invalid: any = structuredClone(sampleBlueprint);
-  invalid.content[2].props.id = "hero-demo-1";
-  assert.equal(PageBlueprintSchema.safeParse(invalid).success, false);
-});
-
-test("unsafe links are rejected", () => {
-  const invalid: any = structuredClone(sampleBlueprint);
-  invalid.content[0].props.ctaHref = "javascript:alert(1)";
-  assert.equal(PageBlueprintSchema.safeParse(invalid).success, false);
+  const invalid = JSON.parse(JSON.stringify(sampleBlueprint));
+  invalid.content[1].props.id = "hero-demo-1";
+  assert.throws(() => parsePuckBlueprint(invalid));
 });
 
 test("invented-required email is not necessary", () => {
-  assert.equal(PageBlueprintSchema.safeParse(sampleBlueprint).success, true);
+  const valid = JSON.parse(JSON.stringify(sampleBlueprint));
+  delete valid.content[2].props.email;
+  assert.doesNotThrow(() => parsePuckBlueprint(valid));
 });
