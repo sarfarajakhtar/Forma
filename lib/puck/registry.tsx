@@ -3,8 +3,9 @@ import React from "react";
 
 export const puckConfig: Config = {
   components: {
+    // --- ORIGINAL COMPONENTS ---
     HeroImage: {
-      label: "Image hero",
+      label: "Image hero (Cinematic)",
       fields: {
         headline: { type: "text" },
         subheadline: { type: "textarea" },
@@ -28,7 +29,7 @@ export const puckConfig: Config = {
       ),
     },
     FeaturesBento: {
-      label: "Asymmetric features",
+      label: "Asymmetric features (Bento)",
       fields: {
         title: { type: "text" },
         items: {
@@ -46,9 +47,8 @@ export const puckConfig: Config = {
         <section id="services" className="bg-stone-50 py-20 text-stone-950 sm:py-28">
           <div className="mx-auto max-w-7xl px-6 md:px-12">
             <h2 className="mb-12 max-w-4xl text-4xl font-semibold tracking-tight sm:text-5xl">{title}</h2>
-            {/* FIXED GRID: Using grid-cols-3 for perfect alignment */}
             <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-              {items.map((item: { title: string; description: string; imageUrl: string; imageAlt: string }, index: number) => (
+              {items.map((item: any, index: number) => (
                 <article key={index} className="group relative min-h-[320px] overflow-hidden rounded-xl bg-stone-800 md:min-h-[400px]">
                   <img src={item.imageUrl} alt={item.imageAlt} className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
@@ -63,6 +63,91 @@ export const puckConfig: Config = {
         </section>
       ),
     },
+
+    // --- NEW ELITE COMPONENTS ---
+    HeroSplit: {
+      label: "Split hero (Asymmetric)",
+      fields: {
+        headline: { type: "text" },
+        subheadline: { type: "textarea" },
+        imageUrl: { type: "text" },
+        imageAlt: { type: "text" },
+        ctaText: { type: "text" },
+        ctaHref: { type: "text" },
+      },
+      render: ({ headline, subheadline, imageUrl, imageAlt, ctaText, ctaHref }) => (
+        <section className="relative isolate flex min-h-[85svh] items-center bg-white text-stone-950">
+          <div className="mx-auto grid w-full max-w-7xl grid-cols-1 gap-12 px-6 py-24 md:grid-cols-2 md:px-12 md:py-0">
+            <div className="flex flex-col justify-center">
+              <h1 className="text-5xl font-semibold leading-[1.1] tracking-tight sm:text-6xl lg:text-7xl">{headline}</h1>
+              <p className="mt-6 max-w-lg text-lg leading-relaxed text-stone-600 sm:text-xl">{subheadline}</p>
+              <div className="mt-10">
+                <a href={ctaHref} className="inline-block rounded bg-stone-900 px-8 py-4 font-semibold text-white focus-visible:outline focus-visible:outline-4 focus-visible:outline-offset-4 focus-visible:outline-stone-900">{ctaText}</a>
+              </div>
+            </div>
+            <div className="relative h-[400px] md:h-[600px] w-full">
+               <img src={imageUrl} alt={imageAlt} className="absolute inset-0 h-full w-full rounded-2xl object-cover shadow-2xl" />
+            </div>
+          </div>
+        </section>
+      ),
+    },
+    FeaturesTimeline: {
+      label: "Editorial timeline (Process)",
+      fields: {
+        title: { type: "text" },
+        items: {
+          type: "array",
+          getItemSummary: (item) => item.title || "Step",
+          arrayFields: {
+            num: { type: "text" },
+            title: { type: "text" },
+            description: { type: "textarea" },
+          },
+        },
+      },
+      render: ({ title, items }) => (
+        <section className="bg-stone-950 py-24 text-white sm:py-32">
+          <div className="mx-auto max-w-7xl px-6 md:px-12">
+            <h2 className="mb-20 text-4xl font-semibold tracking-tight sm:text-5xl">{title}</h2>
+            <div className="grid grid-cols-1 gap-12 md:grid-cols-3 md:border-t-2 md:border-white/10 md:pt-12">
+              {items.map((item: any, index: number) => (
+                <div key={index} className="relative">
+                  <span className="mb-6 block text-7xl font-bold leading-none text-white/20">{item.num}</span>
+                  <h3 className="mb-4 text-2xl font-semibold text-white">{item.title}</h3>
+                  <p className="text-lg leading-relaxed text-stone-400">{item.description}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      ),
+    },
+    TestimonialSplit: {
+      label: "Split testimonial (Editorial)",
+      fields: {
+        quote: { type: "textarea" },
+        author: { type: "text" },
+        imageUrl: { type: "text" },
+        imageAlt: { type: "text" },
+      },
+      render: ({ quote, author, imageUrl, imageAlt }) => (
+        <section className="bg-stone-100">
+          <div className="mx-auto grid max-w-7xl grid-cols-1 md:grid-cols-2">
+            <div className="relative h-[400px] md:h-auto">
+              <img src={imageUrl} alt={imageAlt} className="absolute inset-0 h-full w-full object-cover" />
+            </div>
+            <div className="flex flex-col justify-center p-12 md:p-24">
+              <p className="mb-8 text-sm font-semibold uppercase tracking-widest text-stone-500">Client Stories</p>
+              <h2 className="text-3xl font-medium leading-snug text-stone-900 md:text-4xl">"{quote}"</h2>
+              <p className="mt-8 text-sm font-semibold uppercase tracking-widest text-stone-500">— {author}</p>
+            </div>
+          </div>
+        </section>
+      ),
+    },
+
+    // --- FOOTER ---
     FooterMinimal: {
       label: "Minimal footer",
       fields: {
