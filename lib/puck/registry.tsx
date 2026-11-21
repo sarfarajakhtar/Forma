@@ -1,35 +1,61 @@
+"use client";
 import type { Config } from "@puckeditor/core";
 import React from "react";
+import { motion } from "framer-motion";
 
 export const puckConfig: Config = {
   components: {
-    // --- ORIGINAL COMPONENTS ---
-    HeroImage: {
-      label: "Image hero (Cinematic)",
+    HeroCinematic: {
+      label: "Cinematic Hero (Gym/Cinema)",
       fields: {
         headline: { type: "text" },
         subheadline: { type: "textarea" },
         imageUrl: { type: "text" },
-        imageAlt: { type: "text" },
         ctaText: { type: "text" },
-        ctaHref: { type: "text" },
       },
-      render: ({ headline, subheadline, imageUrl, imageAlt, ctaText, ctaHref }) => (
-        <section className="relative isolate flex min-h-[85svh] items-center overflow-hidden bg-slate-950 text-white">
-          <img src={imageUrl} alt={imageAlt} className="absolute inset-0 -z-20 h-full w-full object-cover" />
-          <div className="absolute inset-0 -z-10 bg-gradient-to-r from-slate-950/90 via-slate-950/60 to-slate-950/10" />
-          <div className="mx-auto w-full max-w-7xl px-6 py-28 md:px-12">
-            <div className="max-w-3xl">
-              <h1 className="text-5xl font-semibold leading-tight tracking-tight sm:text-6xl lg:text-7xl">{headline}</h1>
-              <p className="mt-6 max-w-2xl text-lg leading-relaxed text-slate-100 sm:text-xl">{subheadline}</p>
-              <a href={ctaHref} className="mt-10 inline-block rounded bg-white px-7 py-4 font-semibold text-slate-950 focus-visible:outline focus-visible:outline-4 focus-visible:outline-offset-4 focus-visible:outline-white">{ctaText}</a>
-            </div>
+      render: ({ headline, subheadline, imageUrl, ctaText }) => (
+        <section className="relative isolate flex min-h-[90svh] items-center overflow-hidden bg-slate-950 text-white">
+          <img src={imageUrl} alt="" className="absolute inset-0 -z-20 h-full w-full object-cover opacity-60" />
+          <div className="absolute inset-0 -z-10 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
+          <div className="mx-auto w-full max-w-7xl px-6 py-32 md:px-12">
+            <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 0.2 }} className="max-w-4xl">
+              <h1 className="text-5xl font-bold uppercase leading-[0.95] tracking-tighter sm:text-7xl lg:text-8xl">{headline}</h1>
+              <p className="mt-8 max-w-2xl text-lg leading-relaxed text-slate-200 sm:text-2xl font-light">{subheadline}</p>
+              <motion.button initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8, delay: 0.8 }} className="mt-12 rounded-full bg-white px-10 py-5 text-sm font-bold uppercase tracking-widest text-slate-950 transition-transform hover:scale-105">
+                {ctaText}
+              </motion.button>
+            </motion.div>
+          </div>
+        </section>
+      ),
+    },
+    HeroSplit: {
+      label: "Split Hero (Law/Tech/Corporate)",
+      fields: {
+        headline: { type: "text" },
+        subheadline: { type: "textarea" },
+        imageUrl: { type: "text" },
+        ctaText: { type: "text" },
+      },
+      render: ({ headline, subheadline, imageUrl, ctaText }) => (
+        <section className="relative isolate flex min-h-[85svh] items-center bg-white text-stone-950">
+          <div className="mx-auto grid w-full max-w-7xl grid-cols-1 gap-12 px-6 py-24 md:grid-cols-2 md:px-12 md:py-0">
+            <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }} className="flex flex-col justify-center">
+              <h1 className="text-5xl font-serif leading-[1.1] tracking-tight sm:text-6xl lg:text-7xl">{headline}</h1>
+              <p className="mt-6 max-w-lg text-lg leading-relaxed text-stone-600 sm:text-xl">{subheadline}</p>
+              <div className="mt-10">
+                <button className="rounded-none border border-stone-900 bg-stone-900 px-8 py-4 text-sm font-semibold uppercase tracking-widest text-white transition-colors hover:bg-transparent hover:text-stone-900">{ctaText}</button>
+              </div>
+            </motion.div>
+            <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8, delay: 0.2 }} className="relative h-[500px] md:h-[700px] w-full">
+               <img src={imageUrl} alt="" className="absolute inset-0 h-full w-full object-cover shadow-2xl" />
+            </motion.div>
           </div>
         </section>
       ),
     },
     FeaturesBento: {
-      label: "Asymmetric features (Bento)",
+      label: "Bento Grid Features (Visual)",
       fields: {
         title: { type: "text" },
         items: {
@@ -39,61 +65,31 @@ export const puckConfig: Config = {
             title: { type: "text" },
             description: { type: "textarea" },
             imageUrl: { type: "text" },
-            imageAlt: { type: "text" },
           },
         },
       },
       render: ({ title, items }) => (
-        <section id="services" className="bg-stone-50 py-20 text-stone-950 sm:py-28">
+        <section id="services" className="bg-stone-50 py-24 text-stone-950 sm:py-32">
           <div className="mx-auto max-w-7xl px-6 md:px-12">
-            <h2 className="mb-12 max-w-4xl text-4xl font-semibold tracking-tight sm:text-5xl">{title}</h2>
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+            <motion.h2 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mb-16 max-w-4xl text-4xl font-serif tracking-tight sm:text-6xl">{title}</motion.h2>
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
               {items.map((item: any, index: number) => (
-                <article key={index} className="group relative min-h-[320px] overflow-hidden rounded-xl bg-stone-800 md:min-h-[400px]">
-                  <img src={item.imageUrl} alt={item.imageAlt} className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
-                  <div className="absolute inset-x-0 bottom-0 p-6 text-white sm:p-8">
-                    <h3 className="text-2xl font-semibold">{item.title}</h3>
-                    <p className="mt-2 max-w-md leading-relaxed text-white/90">{item.description}</p>
+                <motion.article initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.1 }} key={index} className="group relative min-h-[400px] overflow-hidden rounded-sm bg-stone-800">
+                  <img src={item.imageUrl} alt="" className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110 grayscale group-hover:grayscale-0" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
+                  <div className="absolute inset-x-0 bottom-0 p-8 text-white">
+                    <h3 className="text-2xl font-serif font-medium">{item.title}</h3>
+                    <p className="mt-3 max-w-md text-sm leading-relaxed text-white/80">{item.description}</p>
                   </div>
-                </article>
+                </motion.article>
               ))}
             </div>
           </div>
         </section>
       ),
     },
-
-    // --- NEW ELITE COMPONENTS ---
-    HeroSplit: {
-      label: "Split hero (Asymmetric)",
-      fields: {
-        headline: { type: "text" },
-        subheadline: { type: "textarea" },
-        imageUrl: { type: "text" },
-        imageAlt: { type: "text" },
-        ctaText: { type: "text" },
-        ctaHref: { type: "text" },
-      },
-      render: ({ headline, subheadline, imageUrl, imageAlt, ctaText, ctaHref }) => (
-        <section className="relative isolate flex min-h-[85svh] items-center bg-white text-stone-950">
-          <div className="mx-auto grid w-full max-w-7xl grid-cols-1 gap-12 px-6 py-24 md:grid-cols-2 md:px-12 md:py-0">
-            <div className="flex flex-col justify-center">
-              <h1 className="text-5xl font-semibold leading-[1.1] tracking-tight sm:text-6xl lg:text-7xl">{headline}</h1>
-              <p className="mt-6 max-w-lg text-lg leading-relaxed text-stone-600 sm:text-xl">{subheadline}</p>
-              <div className="mt-10">
-                <a href={ctaHref} className="inline-block rounded bg-stone-900 px-8 py-4 font-semibold text-white focus-visible:outline focus-visible:outline-4 focus-visible:outline-offset-4 focus-visible:outline-stone-900">{ctaText}</a>
-              </div>
-            </div>
-            <div className="relative h-[400px] md:h-[600px] w-full">
-               <img src={imageUrl} alt={imageAlt} className="absolute inset-0 h-full w-full rounded-2xl object-cover shadow-2xl" />
-            </div>
-          </div>
-        </section>
-      ),
-    },
     FeaturesTimeline: {
-      label: "Editorial timeline (Process)",
+      label: "Editorial Timeline (Process)",
       fields: {
         title: { type: "text" },
         items: {
@@ -109,60 +105,38 @@ export const puckConfig: Config = {
       render: ({ title, items }) => (
         <section className="bg-stone-950 py-24 text-white sm:py-32">
           <div className="mx-auto max-w-7xl px-6 md:px-12">
-            <h2 className="mb-20 text-4xl font-semibold tracking-tight sm:text-5xl">{title}</h2>
-            <div className="grid grid-cols-1 gap-12 md:grid-cols-3 md:border-t-2 md:border-white/10 md:pt-12">
+            <motion.h2 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mb-24 text-4xl font-serif tracking-tight sm:text-6xl">{title}</motion.h2>
+            <div className="grid grid-cols-1 gap-16 md:grid-cols-3 md:border-t-2 md:border-white/10 md:pt-16">
               {items.map((item: any, index: number) => (
-                <div key={index} className="relative">
-                  <span className="mb-6 block text-7xl font-bold leading-none text-white/20">{item.num}</span>
-                  <h3 className="mb-4 text-2xl font-semibold text-white">{item.title}</h3>
-                  <p className="text-lg leading-relaxed text-stone-400">{item.description}</p>
-                </div>
+                <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.2 }} key={index} className="relative">
+                  <span className="mb-8 block text-8xl font-serif italic text-white/10">{item.num}</span>
+                  <h3 className="mb-4 text-3xl font-bold uppercase tracking-tight text-white">{item.title}</h3>
+                  <p className="text-lg leading-relaxed text-stone-400 font-light">{item.description}</p>
+                </motion.div>
               ))}
             </div>
           </div>
         </section>
       ),
     },
-    TestimonialSplit: {
-      label: "Split testimonial (Editorial)",
-      fields: {
-        quote: { type: "textarea" },
-        author: { type: "text" },
-        imageUrl: { type: "text" },
-        imageAlt: { type: "text" },
-      },
-      render: ({ quote, author, imageUrl, imageAlt }) => (
-        <section className="bg-stone-100">
-          <div className="mx-auto grid max-w-7xl grid-cols-1 md:grid-cols-2">
-            <div className="relative h-[400px] md:h-auto">
-              <img src={imageUrl} alt={imageAlt} className="absolute inset-0 h-full w-full object-cover" />
-            </div>
-            <div className="flex flex-col justify-center p-12 md:p-24">
-              <p className="mb-8 text-sm font-semibold uppercase tracking-widest text-stone-500">Client Stories</p>
-              <h2 className="text-3xl font-medium leading-snug text-stone-900 md:text-4xl">"{quote}"</h2>
-              <p className="mt-8 text-sm font-semibold uppercase tracking-widest text-stone-500">— {author}</p>
-            </div>
-          </div>
-        </section>
-      ),
-    },
-
-    // --- FOOTER ---
     FooterMinimal: {
-      label: "Minimal footer",
+      label: "Mega Footer",
       fields: {
         brandName: { type: "text" },
         email: { type: "text" },
         address: { type: "textarea" },
       },
       render: ({ brandName, email, address }) => (
-        <footer id="contact" className="bg-stone-950 px-6 py-16 text-stone-100 md:px-12">
-          <div className="mx-auto flex max-w-7xl flex-col justify-between gap-8 sm:flex-row">
-            <h2 className="text-3xl font-semibold">{brandName}</h2>
-            <div className="space-y-2 text-sm">
-              {email && <p><a className="underline underline-offset-4" href={`mailto:${email}`}>{email}</a></p>}
-              {address && <p>{address}</p>}
+        <footer id="contact" className="bg-stone-950 px-6 py-24 text-stone-100 md:px-12">
+          <div className="mx-auto flex max-w-7xl flex-col justify-between gap-12 border-b border-white/10 pb-16 sm:flex-row">
+            <h2 className="text-6xl font-bold uppercase tracking-tighter md:text-8xl">{brandName}</h2>
+            <div className="space-y-4 text-lg font-light text-stone-400">
+              {email && <p><a className="transition-colors hover:text-white" href={`mailto:${email}`}>{email}</a></p>}
+              {address && <p className="max-w-xs">{address}</p>}
             </div>
+          </div>
+          <div className="mx-auto mt-8 max-w-7xl text-xs uppercase tracking-widest text-stone-600">
+            © {new Date().getFullYear()} {brandName}. All rights reserved.
           </div>
         </footer>
       ),
