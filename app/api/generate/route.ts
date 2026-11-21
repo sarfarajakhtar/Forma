@@ -74,9 +74,9 @@ export async function POST(req: Request) {
     const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
     const msg = await client.messages.create({
-      model: "claude-3-5-sonnet-20241022", // Using stable model for strict JSON adherence
+      model: "claude-sonnet-4-6", // Valid, active model
       temperature: 0.2,
-      max_tokens: 8000, // Increased tokens to fit the larger JSON payload
+      max_tokens: 8000, 
       system: SYSTEM_PROMPT,
       messages: [{ role: "user", content: `Generate the JSON blueprint for:\n\n${description}` }]
     });
