@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
-import { parsePuckBlueprint } from "../../../lib/puck/blueprint";
+import { parsePuckBlueprint } from "../../lib/puck/blueprint";
 
 export const maxDuration = 60;
 
@@ -77,13 +77,10 @@ export async function POST(req: Request) {
 
     let text = msg.content[0].type === 'text' ? msg.content[0].text : "";
     
-    // Clean up just in case Claude ignores instructions and adds markdown
     const jsonMatch = text.match(/\{[\s\S]*\}/);
     if (!jsonMatch) throw new Error("AI did not return valid JSON.");
 
     const rawJson = JSON.parse(jsonMatch[0]);
-
-    // VALIDATE: Using your exact parsePuckBlueprint function
     const validatedBlueprint = parsePuckBlueprint(rawJson);
 
     return NextResponse.json({ blueprint: validatedBlueprint });
