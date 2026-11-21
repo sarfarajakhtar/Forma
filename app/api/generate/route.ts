@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
-import { parsePuckBlueprint } from "../../lib/puck/blueprint";
+import { parsePuckBlueprint } from "../../../lib/puck/blueprint";
 
 export const maxDuration = 60;
 
